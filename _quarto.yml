@@ -8,12 +8,18 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - projects.qmd
+      - text: MSCS 264 Projects
+        href: projects.qmd
+      - text: Map
+        href: map.qmd
     tools:
       - icon: linkedin
         href: https://www.linkedin.com/in/faynguyen03/
       - icon: github
         href: https://github.com/FayNguyen03
+      - icon: laptop
+        href: https://faynguyen03.github.io/
+      
   page-footer:
     left: |
       &copy; Khanh Tra Nguyen Tran, 2024<br>

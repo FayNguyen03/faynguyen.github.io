@@ -3,7 +3,7 @@ title: "Fay Nguyen"
 about:
   id: intro_heading
   template: trestles
-  image: img/portrait.png
+  image: img/portrait.jpg
   image-shape: round
   links: 
     - icon: github
