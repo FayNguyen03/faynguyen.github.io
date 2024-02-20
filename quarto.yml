@@ -21,6 +21,7 @@ website:
 format:
   html:
     theme: cerulean
+    css: styles.css
     toc: true
 
-editor: source
+editor: Fay Nguyen
