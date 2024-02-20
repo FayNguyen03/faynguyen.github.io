@@ -3,7 +3,7 @@ project:
   output-dir: docs
   
 website:
-  title: "Fay Nguyen Website"
+  title: "Fay Nguyen"
   navbar:
     left:
       - href: index.qmd
@@ -15,8 +15,11 @@ website:
       - icon: github
         href: https://github.com/FayNguyen03
   page-footer:
-    right: "Built with [Quarto](https://quarto.org/)"
-    left: "&copy; Copyright 2024, Khanh Tra Nguyen Tran"
+    left: |
+      &copy; Khanh Tra Nguyen Tran, 2024<br>
+      All content licensed under ![](https://static.thenounproject.com/png/70967-200.png){height=20px} ([CC BY-NC-SA 4.0](http://creativecommons.org/licenses/by-nc-sa/4.0/))
+    right: |
+      Site built with [Quarto](https://quarto.org/)
 
 format:
   html:
@@ -24,4 +27,4 @@ format:
     css: styles.css
     toc: true
 
-editor: Fay Nguyen
+editor: source

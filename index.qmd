@@ -1,13 +1,21 @@
 ---
-title: "About Me"
+title: "Fay Nguyen"
 about:
-  id: me
-  template: broadside
+  id: intro_heading
+  template: trestles
   image: img/portrait.png
+  image-shape: round
+  links: 
+    - icon: github
+      href: https://github.com/FayNguyen03
+    - icon: linkedin
+      href: https://www.linkedin.com/in/faynguyen03/
 ---
 
-::: {#me}
+::: {#intro_heading}
 ## Goals
+
+- Landing My First Internship this Summer
 
 ## Education
 
@@ -18,6 +26,7 @@ Computer Science, Maths major
 Data Science concentration
 
 ## Experience
+
+## Contact Me
 :::
 
-Thanks for checking out my web site!
