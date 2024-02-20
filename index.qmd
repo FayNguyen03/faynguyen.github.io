@@ -1,0 +1,23 @@
+---
+title: "About Me"
+about:
+  id: me
+  template: broadside
+  image: img/portrait.png
+---
+
+::: {#me}
+## Goals
+
+## Education
+
+**St.Olaf College** *Expected 2026*
+
+Computer Science, Maths major
+
+Data Science concentration
+
+## Experience
+:::
+
+Thanks for checking out my web site!

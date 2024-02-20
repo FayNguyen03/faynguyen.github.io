@@ -1,0 +1,26 @@
+project:
+  type: website
+  output-dir: docs
+  
+website:
+  title: "Fay Nguyen Website"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - projects.qmd
+    tools:
+      - icon: linkedin
+        href: https://www.linkedin.com/in/faynguyen03/
+      - icon: github
+        href: https://github.com/FayNguyen03
+  page-footer:
+    right: "Built with [Quarto](https://quarto.org/)"
+    left: "&copy; Copyright 2024, Khanh Tra Nguyen Tran"
+
+format:
+  html:
+    theme: cerulean
+    toc: true
+
+editor: source
