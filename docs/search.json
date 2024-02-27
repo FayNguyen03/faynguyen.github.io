@@ -18,7 +18,7 @@
     "href": "index.html",
     "title": "Fay Nguyen",
     "section": "",
-    "text": "Landing My First Internship this Summer\n\n\n\n\nBA in Computer Science, Maths with Data Science concentration 2026 | St. Olaf College"
+    "text": "Landing My First Internship this Summer\n\n\n\n\nBA in Computer Science, Maths with Statistics and Data Science concentration 2026 | St. Olaf College"
   },
   {
     "objectID": "index.html#goals",
@@ -32,6 +32,41 @@
     "href": "index.html#education",
     "title": "Fay Nguyen",
     "section": "",
-    "text": "BA in Computer Science, Maths with Data Science concentration 2026 | St. Olaf College"
+    "text": "BA in Computer Science, Maths with Statistics and Data Science concentration 2026 | St. Olaf College"
+  },
+  {
+    "objectID": "map.html#project-2",
+    "href": "map.html#project-2",
+    "title": "Maps",
+    "section": "Project 2",
+    "text": "Project 2"
+  },
+  {
+    "objectID": "map.html#project-3",
+    "href": "map.html#project-3",
+    "title": "Maps",
+    "section": "Project 3",
+    "text": "Project 3"
+  },
+  {
+    "objectID": "map.html",
+    "href": "map.html",
+    "title": "Maps",
+    "section": "",
+    "text": "us_data &lt;- map_data(\"state\")\nhome_health_care &lt;- read.csv(\"health.csv\")\n\nhome_health_care |&gt;\n  drop_na(Quality.of.Patient.Care.Star.Rating) |&gt;\n  mutate(State = str_to_lower(abbr2state(State))) |&gt;\n  filter(!is.na(State), !State %in% c(\"district of columbia\",\"alaska\",\"hawaii\")) |&gt;\n  right_join(us_data,\n    by = c(\"State\" = \"region\")) |&gt;\n  ggplot(mapping = aes(x = long, y = lat, group = group)) +\n  geom_polygon(aes(fill = How.often.patients..wounds.improved.or.healed.after.an.operation),linewidth=0.3,color=\"white\") +\n  labs(fill = \"Percentage of wounds getting healed\", title=\"How often patients' wounds healed after an operation in 48 states\", subtitle=\"Data: Home Health Care - State by State Data\",caption = \"Source: Data.gov\") +\n  coord_map() +\n  # This theme can give you a really clean look!\n  theme_void() +\n  scale_fill_viridis_b()"
+  },
+  {
+    "objectID": "map.html#us-states",
+    "href": "map.html#us-states",
+    "title": "Maps",
+    "section": "",
+    "text": "us_data &lt;- map_data(\"state\")\nhome_health_care &lt;- read.csv(\"health.csv\")\n\nhome_health_care |&gt;\n  drop_na(Quality.of.Patient.Care.Star.Rating) |&gt;\n  mutate(State = str_to_lower(abbr2state(State))) |&gt;\n  filter(!is.na(State), !State %in% c(\"district of columbia\",\"alaska\",\"hawaii\")) |&gt;\n  right_join(us_data,\n    by = c(\"State\" = \"region\")) |&gt;\n  ggplot(mapping = aes(x = long, y = lat, group = group)) +\n  geom_polygon(aes(fill = How.often.patients..wounds.improved.or.healed.after.an.operation),linewidth=0.3,color=\"white\") +\n  labs(fill = \"Percentage of wounds getting healed\", title=\"How often patients' wounds healed after an operation in 48 states\", subtitle=\"Data: Home Health Care - State by State Data\",caption = \"Source: Data.gov\") +\n  coord_map() +\n  # This theme can give you a really clean look!\n  theme_void() +\n  scale_fill_viridis_b()"
+  },
+  {
+    "objectID": "map.html#wisconsin-districts",
+    "href": "map.html#wisconsin-districts",
+    "title": "Maps",
+    "section": "Wisconsin Districts",
+    "text": "Wisconsin Districts"
   }
 ]

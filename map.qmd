@@ -1,0 +1,37 @@
+---
+title: "Maps"
+---
+
+```{r,cache=TRUE,echo=FALSE,result=FALSE}
+library(usdata)
+library(maps)
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+library(viridis)
+```
+
+## US States
+```{r, fig.width=10,cache=TRUE}
+
+us_data <- map_data("state")
+home_health_care <- read.csv("health.csv")
+
+home_health_care |>
+  drop_na(Quality.of.Patient.Care.Star.Rating) |>
+  mutate(State = str_to_lower(abbr2state(State))) |>
+  filter(!is.na(State), !State %in% c("district of columbia","alaska","hawaii")) |>
+  right_join(us_data,
+    by = c("State" = "region")) |>
+  ggplot(mapping = aes(x = long, y = lat, group = group)) +
+  geom_polygon(aes(fill = How.often.patients..wounds.improved.or.healed.after.an.operation),linewidth=0.3,color="white") +
+  labs(fill = "Percentage of wounds getting healed", title="How often patients' wounds healed after an operation in 48 states", subtitle="Data: Home Health Care - State by State Data",caption = "Source: Data.gov") +
+  coord_map() +
+  # This theme can give you a really clean look!
+  theme_void() +
+  scale_fill_viridis()
+```
+
+## Wisconsin Districts
+
+

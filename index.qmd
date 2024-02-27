@@ -7,7 +7,7 @@ about:
   image-shape: round
   links: 
     - icon: github
-      href: https://github.com/FayNguyen03
+      href: https://github.com/FayNguyen03/faynguyen.github.io
     - icon: linkedin
       href: https://www.linkedin.com/in/faynguyen03/
 ---
@@ -19,11 +19,8 @@ about:
 
 ## Education
 
-**St.Olaf College** *Expected 2026*
-
-Computer Science, Maths major
-
-Data Science concentration
+BA in Computer Science, Maths with Statistics and Data Science concentration
+2026 | St. Olaf College
 
 ## Experience
 
