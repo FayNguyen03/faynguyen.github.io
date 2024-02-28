@@ -10,3 +10,10 @@ purrr
 stringr
 forcats
 lubridate
+viridisLite
+viridis
+usethis
+devtools
+leaflet
+ggspatial
+quarto

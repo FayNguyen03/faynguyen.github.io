@@ -35,38 +35,38 @@
     "text": "BA in Computer Science, Maths with Statistics and Data Science concentration 2026 | St. Olaf College"
   },
   {
-    "objectID": "map.html#project-2",
-    "href": "map.html#project-2",
-    "title": "Maps",
-    "section": "Project 2",
-    "text": "Project 2"
-  },
-  {
-    "objectID": "map.html#project-3",
-    "href": "map.html#project-3",
-    "title": "Maps",
-    "section": "Project 3",
-    "text": "Project 3"
-  },
-  {
     "objectID": "map.html",
     "href": "map.html",
     "title": "Maps",
     "section": "",
-    "text": "us_data &lt;- map_data(\"state\")\nhome_health_care &lt;- read.csv(\"health.csv\")\n\nhome_health_care |&gt;\n  drop_na(Quality.of.Patient.Care.Star.Rating) |&gt;\n  mutate(State = str_to_lower(abbr2state(State))) |&gt;\n  filter(!is.na(State), !State %in% c(\"district of columbia\",\"alaska\",\"hawaii\")) |&gt;\n  right_join(us_data,\n    by = c(\"State\" = \"region\")) |&gt;\n  ggplot(mapping = aes(x = long, y = lat, group = group)) +\n  geom_polygon(aes(fill = How.often.patients..wounds.improved.or.healed.after.an.operation),linewidth=0.3,color=\"white\") +\n  labs(fill = \"Percentage of wounds getting healed\", title=\"How often patients' wounds healed after an operation in 48 states\", subtitle=\"Data: Home Health Care - State by State Data\",caption = \"Source: Data.gov\") +\n  coord_map() +\n  # This theme can give you a really clean look!\n  theme_void() +\n  scale_fill_viridis_b()"
+    "text": "us_data &lt;- map_data(\"state\")\nhome_health_care &lt;- read.csv(\"health.csv\")\n\nhome_health_care |&gt;\n  drop_na(Quality.of.Patient.Care.Star.Rating) |&gt;\n  mutate(State = str_to_lower(abbr2state(State))) |&gt;\n  filter(!is.na(State), !State %in% c(\"district of columbia\",\"alaska\",\"hawaii\")) |&gt;\n  right_join(us_data,\n    by = c(\"State\" = \"region\")) |&gt;\n  ggplot(mapping = aes(x = long, y = lat, group = group)) +\n  geom_polygon(aes(fill = How.often.patients..wounds.improved.or.healed.after.an.operation),linewidth=0.3,color=\"white\") +\n  labs(fill = \"Percentage of wounds getting healed \\nafter operation\", title=\"How Often Patients' Wounds Healed After An Operation In 48 States\", subtitle=\"Data: Home Health Care - State by State Data\",caption = \"Source: Data.gov\") +\n  coord_map() +\n  theme(plot.title = element_text(size = 30)) +\n  theme_void() +\n  scale_fill_viridis()\n\n\n\n\nData Link\nThe data set records the state averages of several home health agency quality measures for Home Health Agencies. The variable of interest is\nHow.often.patients..wounds.improved.or.healed.after.an.operation.\nIn the plot, the more yellowish shade each state has, the higher the average percentage of wounds healed after operation. Therefore, South Dakota is the state with the lowest percentage of healed wounds (&lt;87%) while Rhode Island is the highest (&gt;93%). The states in the Northeastern and South East regions tend to have higher percentage of healing than the other regions of the country. This plot can provide valuable insights into the healthcare quality of each state. However, we need to carefully consider various factors beyond the raw averages to accurately assess and compare healthcare quality between states since each state has different population demographics as well as patients’ access to healthcare services and how frequently individuals utilize these services can impact healing rates. Therefore, while state averages for wound healing after operations provide an important snapshot of healthcare outcomes of each state, they should be interpreted within the broader context of demographic, socioeconomic, policy, and healthcare system factors."
   },
   {
     "objectID": "map.html#us-states",
     "href": "map.html#us-states",
     "title": "Maps",
     "section": "",
-    "text": "us_data &lt;- map_data(\"state\")\nhome_health_care &lt;- read.csv(\"health.csv\")\n\nhome_health_care |&gt;\n  drop_na(Quality.of.Patient.Care.Star.Rating) |&gt;\n  mutate(State = str_to_lower(abbr2state(State))) |&gt;\n  filter(!is.na(State), !State %in% c(\"district of columbia\",\"alaska\",\"hawaii\")) |&gt;\n  right_join(us_data,\n    by = c(\"State\" = \"region\")) |&gt;\n  ggplot(mapping = aes(x = long, y = lat, group = group)) +\n  geom_polygon(aes(fill = How.often.patients..wounds.improved.or.healed.after.an.operation),linewidth=0.3,color=\"white\") +\n  labs(fill = \"Percentage of wounds getting healed\", title=\"How often patients' wounds healed after an operation in 48 states\", subtitle=\"Data: Home Health Care - State by State Data\",caption = \"Source: Data.gov\") +\n  coord_map() +\n  # This theme can give you a really clean look!\n  theme_void() +\n  scale_fill_viridis_b()"
+    "text": "us_data &lt;- map_data(\"state\")\nhome_health_care &lt;- read.csv(\"health.csv\")\n\nhome_health_care |&gt;\n  drop_na(Quality.of.Patient.Care.Star.Rating) |&gt;\n  mutate(State = str_to_lower(abbr2state(State))) |&gt;\n  filter(!is.na(State), !State %in% c(\"district of columbia\",\"alaska\",\"hawaii\")) |&gt;\n  right_join(us_data,\n    by = c(\"State\" = \"region\")) |&gt;\n  ggplot(mapping = aes(x = long, y = lat, group = group)) +\n  geom_polygon(aes(fill = How.often.patients..wounds.improved.or.healed.after.an.operation),linewidth=0.3,color=\"white\") +\n  labs(fill = \"Percentage of wounds getting healed \\nafter operation\", title=\"How Often Patients' Wounds Healed After An Operation In 48 States\", subtitle=\"Data: Home Health Care - State by State Data\",caption = \"Source: Data.gov\") +\n  coord_map() +\n  theme(plot.title = element_text(size = 30)) +\n  theme_void() +\n  scale_fill_viridis()\n\n\n\n\nData Link\nThe data set records the state averages of several home health agency quality measures for Home Health Agencies. The variable of interest is\nHow.often.patients..wounds.improved.or.healed.after.an.operation.\nIn the plot, the more yellowish shade each state has, the higher the average percentage of wounds healed after operation. Therefore, South Dakota is the state with the lowest percentage of healed wounds (&lt;87%) while Rhode Island is the highest (&gt;93%). The states in the Northeastern and South East regions tend to have higher percentage of healing than the other regions of the country. This plot can provide valuable insights into the healthcare quality of each state. However, we need to carefully consider various factors beyond the raw averages to accurately assess and compare healthcare quality between states since each state has different population demographics as well as patients’ access to healthcare services and how frequently individuals utilize these services can impact healing rates. Therefore, while state averages for wound healing after operations provide an important snapshot of healthcare outcomes of each state, they should be interpreted within the broader context of demographic, socioeconomic, policy, and healthcare system factors."
   },
   {
     "objectID": "map.html#wisconsin-districts",
     "href": "map.html#wisconsin-districts",
     "title": "Maps",
     "section": "Wisconsin Districts",
-    "text": "Wisconsin Districts"
+    "text": "Wisconsin Districts\n\nwi &lt;- ggplot(data = wi_merged, aes(fill = winner)) +\n  annotation_map_tile(zoom = 6, type = \"osm\", progress = \"none\") + \n  geom_sf(alpha = 0.5) +\n  scale_fill_manual(\"Winner\", values = c(\"blue\", \"red\")) + \n  geom_sf_label(aes(label = DISTRICT), fill = \"white\") +\n  theme_void()\nwi + \n  labs(fill = \"Winner Party\", title=\"Wisconsin Controversial Congressional Districts and Gerrymandering\\nin 2016\", caption = \"Source: fes16\")\n\nWarning in st_point_on_surface.sfc(sf::st_zm(x)): st_point_on_surface may not\ngive correct results for longitude/latitude data\n\n\n\n\nwi +\n  aes(fill = r_prop) + \n  scale_fill_distiller(\n    \"Proportion\\nRepublican\", \n    palette = \"RdBu\", \n    limits = c(0, 0.7)\n  )+ \n  labs(title=\"Proportion of Republican Votes in Wisconsin Congressional Districts\", subtitle =\"In 2016\", caption = \"Source: fes16\") \n\nWarning in st_point_on_surface.sfc(sf::st_zm(x)): st_point_on_surface may not\ngive correct results for longitude/latitude data\n\n\n\n\n\nFor the choropleth map, the district 4 has color blue.\n\npal &lt;- colorNumeric(palette = \"RdYlBu\", domain = c(0, 1))\n\nleaflet_wi &lt;- leaflet(wi_merged) |&gt;\n  addTiles() |&gt;\n  addPolygons(\n    weight = 1, \n    fillOpacity = 0.7, \n    fillColor = ~ifelse(r_prop &gt; d_prop, \"red\", \"blue\"), \n    color = \"white\",\n    popup = ~paste(\"District \", DISTRICT, \"&lt;/br&gt;\", \"Probability of Republic Votes: \", round(r_prop, 4),\"&lt;/br&gt;\", \"Probability of Democratic Votes: \", round(d_prop, 4), \"&lt;/br&gt;Total votes: \", wi_results$total_votes)\n  ) |&gt;                         \n  setView(lng = -90, lat = 45, zoom = 7)\nleaflet_wi\n\n\n\n\n\nClicking on a district will show the probability of Republican and Democratic votes of that district.\nIn 2016, most of the districts in Wisconsin’s winner was Republic (6/8), except for District 2,3, and 4. In District 3 and District 4, there are not votes for Republican party. The ratio of probability of votes between the winner and the opponent party of most district is about 2:1. According to the plot, I assume that the winner party is Republican Party since it won more districts."
+  },
+  {
+    "objectID": "projects.html",
+    "href": "projects.html",
+    "title": "Projects",
+    "section": "",
+    "text": "Link"
+  },
+  {
+    "objectID": "projects.html#mini-project-1-maps",
+    "href": "projects.html#mini-project-1-maps",
+    "title": "Projects",
+    "section": "",
+    "text": "Link"
   }
 ]

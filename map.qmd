@@ -2,18 +2,22 @@
 title: "Maps"
 ---
 
-```{r,cache=TRUE,echo=FALSE,result=FALSE}
+```{r,echo=FALSE,result=FALSE,message = FALSE}
 library(usdata)
 library(maps)
 library(ggplot2)
 library(dplyr)
 library(tidyverse)
 library(viridis)
+library(devtools)
+library(leaflet)
+library(ggspatial)
+library(quarto)
 ```
 
 ## US States
-```{r, fig.width=10,cache=TRUE}
 
+```{r, fig.width=10, cache=TRUE}
 us_data <- map_data("state")
 home_health_care <- read.csv("health.csv")
 
@@ -25,13 +29,122 @@ home_health_care |>
     by = c("State" = "region")) |>
   ggplot(mapping = aes(x = long, y = lat, group = group)) +
   geom_polygon(aes(fill = How.often.patients..wounds.improved.or.healed.after.an.operation),linewidth=0.3,color="white") +
-  labs(fill = "Percentage of wounds getting healed", title="How often patients' wounds healed after an operation in 48 states", subtitle="Data: Home Health Care - State by State Data",caption = "Source: Data.gov") +
+  labs(fill = "Percentage of wounds getting healed \nafter operation", title="How Often Patients' Wounds Healed After An Operation In 48 States", subtitle="Data: Home Health Care - State by State Data",caption = "Source: Data.gov") +
   coord_map() +
-  # This theme can give you a really clean look!
+  theme(plot.title = element_text(size = 30)) +
   theme_void() +
   scale_fill_viridis()
 ```
 
+[Data Link](https://data.world/us-hhs-gov/c039b0de-da13-4dbf-ab3f-f99412569f4d)
+
+The data set records the state averages of several home health agency quality measures for Home Health Agencies. The variable of interest is
+
+`How.often.patients..wounds.improved.or.healed.after.an.operation`.
+
+In the plot, the more yellowish shade each state has, the higher the average percentage of wounds healed after operation. Therefore, South Dakota is the state with the lowest percentage of healed wounds (\<87%) while Rhode Island is the highest (\>93%). The states in the Northeastern and South East regions tend to have higher percentage of healing than the other regions of the country. This plot can provide valuable insights into the healthcare quality of each state. However, we need to carefully consider various factors beyond the raw averages to accurately assess and compare healthcare quality between states since each state has different population demographics as well as patients' access to healthcare services and how frequently individuals utilize these services can impact healing rates. Therefore, while state averages for wound healing after operations provide an important snapshot of healthcare outcomes of each state, they should be interpreted within the broader context of demographic, socioeconomic, policy, and healthcare system factors.
+
 ## Wisconsin Districts
 
+```{r,message=FALSE,echo=FALSE,results=FALSE}
+devtools::install_github("baumer-lab/fec16")
+library(fec16)
+print(results_house, width = Inf)
+results_house |>
+  group_by(state, district_id) |>
+  summarize(N = n())
 
+district_elections <- results_house |>
+  mutate(district = parse_number(district_id)) |>
+  group_by(state, district) |>
+  summarize(
+    N = n(), 
+    total_votes = sum(general_votes, na.rm = TRUE),
+    d_votes = sum(ifelse(party == "DEM", general_votes, 0), na.rm = TRUE),
+    r_votes = sum(ifelse(party == "REP", general_votes, 0), na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  mutate(
+    other_votes = total_votes - d_votes - r_votes,
+    r_prop = r_votes / total_votes, 
+    d_prop = d_votes/total_votes,
+    winner = ifelse(r_votes > d_votes, "Republican", "Democrat")
+  )
+
+wi_results <- district_elections |>
+  filter(state == "WI")
+wi_results |>                  
+  select(-state)
+```
+
+```{r, message=FALSE,results=FALSE,echo=FALSE}
+src <- "http://cdmaps.polisci.ucla.edu/shp/districts113.zip"
+lcl_zip <- fs::path(tempdir(), "districts113.zip")
+download.file(src, destfile = lcl_zip)
+lcl_districts <- fs::path(tempdir(), "districts113")
+unzip(lcl_zip, exdir = lcl_districts)
+dsn_districts <- fs::path(lcl_districts, "districtShapes")
+
+library(sf)
+st_layers(dsn_districts)
+
+districts <- st_read(dsn_districts, layer = "districts113") |>
+  mutate(DISTRICT = parse_number(as.character(DISTRICT)))
+head(districts, width = Inf)
+class(districts)
+```
+
+```{r,message=FALSE,echo=FALSE,results=FALSE}
+wi_shp <- districts |>
+  filter(STATENAME == "Wisconsin")
+```
+
+```{r,message=FALSE, echo=FALSE,results=FALSE}
+wi_merged <- wi_shp |>
+  st_transform(4326) |>
+  inner_join(wi_results, by = c("DISTRICT" = "district"))
+head(wi_merged, width = Inf)
+```
+
+```{r,message=FALSE}
+wi <- ggplot(data = wi_merged, aes(fill = winner)) +
+  annotation_map_tile(zoom = 6, type = "osm", progress = "none") + 
+  geom_sf(alpha = 0.5) +
+  scale_fill_manual("Winner", values = c("blue", "red")) + 
+  geom_sf_label(aes(label = DISTRICT), fill = "white") +
+  theme_void()
+wi + 
+  labs(fill = "Winner Party", title="Wisconsin Controversial Congressional Districts and Gerrymandering\nin 2016", caption = "Source: fes16")
+
+wi +
+  aes(fill = r_prop) + 
+  scale_fill_distiller(
+    "Proportion\nRepublican", 
+    palette = "RdBu", 
+    limits = c(0, 0.7)
+  )+ 
+  labs(title="Proportion of Republican Votes in Wisconsin Congressional Districts", subtitle ="In 2016", caption = "Source: fes16") 
+
+```
+
+For the choropleth map, the district 4 has color blue.
+ 
+```{r,fig.height=8,message=FALSE}
+pal <- colorNumeric(palette = "RdYlBu", domain = c(0, 1))
+
+leaflet_wi <- leaflet(wi_merged) |>
+  addTiles() |>
+  addPolygons(
+    weight = 1, 
+    fillOpacity = 0.7, 
+    fillColor = ~ifelse(r_prop > d_prop, "red", "blue"), 
+    color = "white",
+    popup = ~paste("District ", DISTRICT, "</br>", "Probability of Republic Votes: ", round(r_prop, 4),"</br>", "Probability of Democratic Votes: ", round(d_prop, 4), "</br>Total votes: ", wi_results$total_votes)
+  ) |>                         
+  setView(lng = -90, lat = 45, zoom = 7)
+leaflet_wi
+```
+
+Clicking on a district will show the probability of Republican and Democratic votes of that district.
+
+In 2016, most of the districts in Wisconsin's winner was Republic (6/8), except for District 2,3, and 4. In District 3 and District 4, there are not votes for Republican party. The ratio of probability of votes between the winner and the opponent party of most district is about 2:1. According to the plot, I assume that the winner party is Republican Party since it won more districts.

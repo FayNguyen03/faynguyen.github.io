@@ -1,8 +1,10 @@
 ---
 title: "Projects"
+
 ---
 
-## Project 1
+## Mini-Project 1: Maps 
+[Link](map.qmd)
 
 ## Project 2
 
