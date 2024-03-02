@@ -19,11 +19,22 @@ about:
 
 ## Education
 
-BA in Computer Science, Maths with Statistics and Data Science concentration
-2026 | St. Olaf College
+BA in Computer Science, Maths 
+
+Statistics and Data Science concentration
+
+*2026* | **St. Olaf College**
 
 ## Experience
 
+### Undergraduate Researcher
+
+### Lead CS Teaching Assistant
+
+### Technology Consulting Assistant
+
 ## Contact Me
+
+Email: nguyen94@stolaf.edu
 :::
 
