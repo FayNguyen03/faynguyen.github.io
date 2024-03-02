@@ -147,4 +147,4 @@ leaflet_wi
 
 Clicking on a district will show the probability of Republican and Democratic votes of that district.
 
-In 2016, most of the districts in Wisconsin's winner was Republic (6/8), except for District 2,3, and 4. In District 3 and District 4, there are not votes for Republican party. The ratio of probability of votes between the winner and the opponent party of most district is about 2:1. According to the plot, I assume that the winner party is Republican Party since it won more districts.
+In 2016, most of the districts in Wisconsin's winner was Republic (6/8), except for District 2,3, and 4. In District 3 and District 4, there are no votes for Republican party. The ratio of probability of votes between the winner and the opponent party of most district is about 2:1. According to the plot, I assume that the winner party is Republican Party since it won more districts.
