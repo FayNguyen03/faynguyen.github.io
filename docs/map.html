@@ -107,7 +107,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-sidebar floating nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -128,27 +128,60 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="nav-link" href="./index.html" rel="" target="">
  <span class="menu-text">Home</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./projects.html" rel="" target="">
- <span class="menu-text">MSCS 264 Projects</span></a>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-projects" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Projects</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-projects">    
+        <li>
+    <a class="dropdown-item" href="./map.html" rel="" target="">
+ <span class="dropdown-text">Maps</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link active" href="./map.html" rel="" target="" aria-current="page">
- <span class="menu-text">Map</span></a>
+        <li>
+    <a class="dropdown-item" href="./simulation.html" rel="" target="">
+ <span class="dropdown-text">Simulation</span></a>
   </li>  
+    </ul>
+  </li>
 </ul>
-            <div class="quarto-navbar-tools ms-auto tools-wide">
-    <a href="https://www.linkedin.com/in/faynguyen03/" rel="" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-linkedin"></i></a>
-    <a href="https://github.com/FayNguyen03" rel="" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
-    <a href="https://faynguyen03.github.io/" rel="" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-laptop"></i></a>
+            <div class="quarto-navbar-tools ms-auto">
 </div>
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./map.html">Maps</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./map.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Maps</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./simulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Simulation</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -263,7 +296,7 @@ give correct results for longitude/latitude data</code></pre>
 </div>
 </div>
 <p>Clicking on a district will show the probability of Republican and Democratic votes of that district.</p>
-<p>In 2016, most of the districts in Wisconsin’s winner was Republic (6/8), except for District 2,3, and 4. In District 3 and District 4, there are not votes for Republican party. The ratio of probability of votes between the winner and the opponent party of most district is about 2:1. According to the plot, I assume that the winner party is Republican Party since it won more districts.</p>
+<p>In 2016, most of the districts in Wisconsin’s winner was Republic (6/8), except for District 2,3, and 4. In District 3 and District 4, there are no votes for Republican party. The ratio of probability of votes between the winner and the opponent party of most district is about 2:1. According to the plot, I assume that the winner party is Republican Party since it won more districts.</p>
 
 
 </section>

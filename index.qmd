@@ -10,6 +10,7 @@ about:
       href: https://github.com/FayNguyen03/faynguyen.github.io
     - icon: linkedin
       href: https://www.linkedin.com/in/faynguyen03/
+sidebar: false
 ---
 
 ::: {#intro_heading}
@@ -27,11 +28,17 @@ Statistics and Data Science concentration
 
 ## Experience
 
-### Undergraduate Researcher
+1. **Undergraduate Researcher** | May 2023 - Present
 
-### Lead CS Teaching Assistant
+2. **Lead CS Teaching Assistant** | Feb 2023 - Present
 
-### Technology Consulting Assistant
+3. **Technology Consulting Assistant** | Sep 2022 - Present
+
+## Link:
+
+- [Course Link](https://proback.github.io/264_fall_2024/)
+
+- 
 
 ## Contact Me
 

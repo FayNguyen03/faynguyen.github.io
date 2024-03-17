@@ -5,20 +5,22 @@ project:
 website:
   title: "Fay Nguyen"
   navbar:
+    background: primary
+    search: true
     left:
-      - href: index.qmd
-        text: Home
-      - text: MSCS 264 Projects
-        href: projects.qmd
-      - text: Map
-        href: map.qmd
-    tools:
-      - icon: linkedin
-        href: https://www.linkedin.com/in/faynguyen03/
+      - file: index.qmd
+        text: "Home"
+      - sidebar:projects
+    right:
       - icon: github
         href: https://github.com/FayNguyen03
-      - icon: laptop
-        href: https://faynguyen03.github.io/
+  sidebar:
+    - id: projects
+      title: "Projects"
+      contents:
+        - map.qmd
+        - simulation.qmd
+       
       
   page-footer:
     left: |

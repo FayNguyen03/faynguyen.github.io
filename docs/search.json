@@ -18,7 +18,7 @@
     "href": "index.html",
     "title": "Fay Nguyen",
     "section": "",
-    "text": "Landing My First Internship this Summer\n\n\n\n\nBA in Computer Science, Maths\nStatistics and Data Science concentration\n2026 | St. Olaf College\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEmail: nguyen94@stolaf.edu"
+    "text": "Landing My First Internship this Summer\n\n\n\n\nBA in Computer Science, Maths\nStatistics and Data Science concentration\n2026 | St. Olaf College\n\n\n\n\nUndergraduate Researcher | May 2023 - Present\nLead CS Teaching Assistant | Feb 2023 - Present\nTechnology Consulting Assistant | Sep 2022 - Present\n\n\n\n\n\nCourse Link\n\n\n\n\n\nEmail: nguyen94@stolaf.edu"
   },
   {
     "objectID": "index.html#goals",
@@ -53,7 +53,7 @@
     "href": "map.html#wisconsin-districts",
     "title": "Maps",
     "section": "Wisconsin Districts",
-    "text": "Wisconsin Districts\n\nwi &lt;- ggplot(data = wi_merged, aes(fill = winner)) +\n  annotation_map_tile(zoom = 6, type = \"osm\", progress = \"none\") + \n  geom_sf(alpha = 0.5) +\n  scale_fill_manual(\"Winner\", values = c(\"blue\", \"red\")) + \n  geom_sf_label(aes(label = DISTRICT), fill = \"white\") +\n  theme_void()\nwi + \n  labs(fill = \"Winner Party\", title=\"Wisconsin Controversial Congressional Districts and Gerrymandering\\nin 2016\", caption = \"Source: fes16\")\n\nWarning in st_point_on_surface.sfc(sf::st_zm(x)): st_point_on_surface may not\ngive correct results for longitude/latitude data\n\n\n\n\nwi +\n  aes(fill = r_prop) + \n  scale_fill_distiller(\n    \"Proportion\\nRepublican\", \n    palette = \"RdBu\", \n    limits = c(0, 0.7)\n  )+ \n  labs(title=\"Proportion of Republican Votes in Wisconsin Congressional Districts\", subtitle =\"In 2016\", caption = \"Source: fes16\") \n\nWarning in st_point_on_surface.sfc(sf::st_zm(x)): st_point_on_surface may not\ngive correct results for longitude/latitude data\n\n\n\n\n\nFor the choropleth map, the district 4 has color blue.\n\npal &lt;- colorNumeric(palette = \"RdYlBu\", domain = c(0, 1))\n\nleaflet_wi &lt;- leaflet(wi_merged) |&gt;\n  addTiles() |&gt;\n  addPolygons(\n    weight = 1, \n    fillOpacity = 0.7, \n    fillColor = ~ifelse(r_prop &gt; d_prop, \"red\", \"blue\"), \n    color = \"white\",\n    popup = ~paste(\"District \", DISTRICT, \"&lt;/br&gt;\", \"Probability of Republic Votes: \", round(r_prop, 4),\"&lt;/br&gt;\", \"Probability of Democratic Votes: \", round(d_prop, 4), \"&lt;/br&gt;Total votes: \", wi_results$total_votes)\n  ) |&gt;                         \n  setView(lng = -90, lat = 45, zoom = 7)\nleaflet_wi\n\n\n\n\n\nClicking on a district will show the probability of Republican and Democratic votes of that district.\nIn 2016, most of the districts in Wisconsin’s winner was Republic (6/8), except for District 2,3, and 4. In District 3 and District 4, there are not votes for Republican party. The ratio of probability of votes between the winner and the opponent party of most district is about 2:1. According to the plot, I assume that the winner party is Republican Party since it won more districts."
+    "text": "Wisconsin Districts\n\nwi &lt;- ggplot(data = wi_merged, aes(fill = winner)) +\n  annotation_map_tile(zoom = 6, type = \"osm\", progress = \"none\") + \n  geom_sf(alpha = 0.5) +\n  scale_fill_manual(\"Winner\", values = c(\"blue\", \"red\")) + \n  geom_sf_label(aes(label = DISTRICT), fill = \"white\") +\n  theme_void()\nwi + \n  labs(fill = \"Winner Party\", title=\"Wisconsin Controversial Congressional Districts and Gerrymandering\\nin 2016\", caption = \"Source: fes16\")\n\nWarning in st_point_on_surface.sfc(sf::st_zm(x)): st_point_on_surface may not\ngive correct results for longitude/latitude data\n\n\n\n\nwi +\n  aes(fill = r_prop) + \n  scale_fill_distiller(\n    \"Proportion\\nRepublican\", \n    palette = \"RdBu\", \n    limits = c(0, 0.7)\n  )+ \n  labs(title=\"Proportion of Republican Votes in Wisconsin Congressional Districts\", subtitle =\"In 2016\", caption = \"Source: fes16\") \n\nWarning in st_point_on_surface.sfc(sf::st_zm(x)): st_point_on_surface may not\ngive correct results for longitude/latitude data\n\n\n\n\n\nFor the choropleth map, the district 4 has color blue.\n\npal &lt;- colorNumeric(palette = \"RdYlBu\", domain = c(0, 1))\n\nleaflet_wi &lt;- leaflet(wi_merged) |&gt;\n  addTiles() |&gt;\n  addPolygons(\n    weight = 1, \n    fillOpacity = 0.7, \n    fillColor = ~ifelse(r_prop &gt; d_prop, \"red\", \"blue\"), \n    color = \"white\",\n    popup = ~paste(\"District \", DISTRICT, \"&lt;/br&gt;\", \"Probability of Republic Votes: \", round(r_prop, 4),\"&lt;/br&gt;\", \"Probability of Democratic Votes: \", round(d_prop, 4), \"&lt;/br&gt;Total votes: \", wi_results$total_votes)\n  ) |&gt;                         \n  setView(lng = -90, lat = 45, zoom = 7)\nleaflet_wi\n\n\n\n\n\nClicking on a district will show the probability of Republican and Democratic votes of that district.\nIn 2016, most of the districts in Wisconsin’s winner was Republic (6/8), except for District 2,3, and 4. In District 3 and District 4, there are no votes for Republican party. The ratio of probability of votes between the winner and the opponent party of most district is about 2:1. According to the plot, I assume that the winner party is Republican Party since it won more districts."
   },
   {
     "objectID": "projects.html",
@@ -75,5 +75,19 @@
     "title": "Fay Nguyen",
     "section": "",
     "text": "Email: nguyen94@stolaf.edu"
+  },
+  {
+    "objectID": "index.html#experience",
+    "href": "index.html#experience",
+    "title": "Fay Nguyen",
+    "section": "",
+    "text": "Undergraduate Researcher | May 2023 - Present\nLead CS Teaching Assistant | Feb 2023 - Present\nTechnology Consulting Assistant | Sep 2022 - Present"
+  },
+  {
+    "objectID": "index.html#link",
+    "href": "index.html#link",
+    "title": "Fay Nguyen",
+    "section": "",
+    "text": "Course Link"
   }
 ]
