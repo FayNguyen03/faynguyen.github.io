@@ -19,7 +19,7 @@ library(quarto)
 
 ```{r, fig.width=10, cache=TRUE}
 us_data <- map_data("state")
-home_health_care <- read.csv("health.csv")
+home_health_care <- read.csv("dataset/health.csv")
 
 home_health_care |>
   drop_na(Quality.of.Patient.Care.Star.Rating) |>

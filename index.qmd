@@ -27,7 +27,7 @@ Statistics and Data Science concentration
 *2026* | **St. Olaf College**
 
 ## Experience
-
+ 
 1. **Undergraduate Researcher** | May 2023 - Present
 
 2. **Lead CS Teaching Assistant** | Feb 2023 - Present
@@ -38,7 +38,7 @@ Statistics and Data Science concentration
 
 - [Course Link](https://proback.github.io/264_fall_2024/)
 
-- 
+- [Portfolio] (https://faynguyen03.github.io/)
 
 ## Contact Me
 
