@@ -18,7 +18,7 @@
     "href": "index.html",
     "title": "Fay Nguyen",
     "section": "",
-    "text": "Landing My First Internship this Summer\n\n\n\n\nBA in Computer Science, Maths\nStatistics and Data Science concentration\n2026 | St. Olaf College\n\n\n\n\nUndergraduate Researcher | May 2023 - Present\nLead CS Teaching Assistant | Feb 2023 - Present\nTechnology Consulting Assistant | Sep 2022 - Present\n\n\n\n\n\nCourse Link\n\n\n\n\n\nEmail: nguyen94@stolaf.edu"
+    "text": "Landing My First Internship this Summer\n\n\n\n\nBA in Computer Science, Maths\nStatistics and Data Science concentration\n2026 | St. Olaf College\n\n\n\n\nUndergraduate Researcher | May 2023 - Present\nLead CS Teaching Assistant | Feb 2023 - Present\nTechnology Consulting Assistant | Sep 2022 - Present\n\n\n\n\n\nCourse Link\n[Portfolio] (https://faynguyen03.github.io/)\n\n\n\n\nEmail: nguyen94@stolaf.edu"
   },
   {
     "objectID": "index.html#goals",
@@ -88,6 +88,48 @@
     "href": "index.html#link",
     "title": "Fay Nguyen",
     "section": "",
-    "text": "Course Link"
+    "text": "Course Link\n[Portfolio] (https://faynguyen03.github.io/)"
+  },
+  {
+    "objectID": "simulation.html",
+    "href": "simulation.html",
+    "title": "Mini Project 2: Simulation",
+    "section": "",
+    "text": "library(tidyverse)\nlibrary(ggplot2)\nlibrary(tibble)\nlibrary(patchwork)"
+  },
+  {
+    "objectID": "simulation.html#factor-1-variance",
+    "href": "simulation.html#factor-1-variance",
+    "title": "Mini Project 2: Simulation",
+    "section": "Factor 1: Variance",
+    "text": "Factor 1: Variance\nSince we have \\(\\sigma=\\sqrt{Variance}\\), I created 2 groups with the same mean and sample size but difference in standard deviation.\n\nsd_diff &lt;- sample(5:75,iter)\n\n\nsd1 &lt;- 35\n\n\ncombined_data &lt;- tibble(n_per_group = numeric(), power = numeric(), sd_diff_val = numeric())\n\nfor (val in sd_diff) {\n  result &lt;- power_stat_test(mean1, 0, sd1, val, type_1_error_level, numsims, iter)\n  temp_data &lt;- tibble(n_per_group = result[[1]], power = result[[2]], sd_diff_val = rep(val, length(result[[1]])))\n  combined_data &lt;- rbind(combined_data, temp_data)\n}\n\nggplot(combined_data, aes(x = n_per_group, y = power, color = as.factor(sd_diff_val))) +\n  geom_line() +\n  geom_hline(yintercept = 0.8, color = \"red\") +\n  labs(color = \"SD Difference\")+\n  theme_minimal()\n\n\n\nggplot(combined_data, aes(x = n_per_group, y = power, color = fct_reorder2(as.factor(sd_diff_val),n_per_group,power))) +\n  geom_line() +\n  labs(color = \"SD Difference\")+\n  scale_y_discrete(limits=max())+\n  theme_minimal()\n\nWarning in max(): no non-missing arguments to max; returning -Inf\n\n\nWarning: Continuous limits supplied to discrete scale.\nℹ Did you mean `limits = factor(...)` or `scale_*_continuous()`?"
+  },
+  {
+    "objectID": "simulation.html#factor-2-size-of-the-true-difference",
+    "href": "simulation.html#factor-2-size-of-the-true-difference",
+    "title": "Mini Project 2: Simulation",
+    "section": "Factor 2: Size of the true difference",
+    "text": "Factor 2: Size of the true difference\nI created 2 groups with the same mean and sample size but difference in standard deviation.\n\nmean1 &lt;- 225\niter &lt;- 10\ntype_1_error_level &lt;- 0.05\ntrue_diff &lt;- sample(-100:100,iter)\nsd1 &lt;- 35\nnumsims &lt;- 1000\n\nLet mean1 = 225.\n\ncombined_data_mean &lt;- tibble(n_per_group = numeric(), power = numeric(), true_diff_val = numeric())\n\nfor (val in true_diff) {\n  result &lt;- power_stat_test(mean1, val, sd1, 0,type_1_error_level, numsims, iter)\n  temp_data &lt;- tibble(n_per_group = result[[1]], power = result[[2]], true_diff_val = rep(val, length(result[[1]])))\n  combined_data_mean &lt;- rbind(combined_data_mean, temp_data)\n}\n\n\nggplot(combined_data_mean, aes(x = n_per_group, y = power, color = fct_reorder2(as.factor(true_diff_val),n_per_group,power))) +\n  geom_line(linewidth=0.8) +\n  geom_hline(yintercept = 0.8, color = \"red\", linewidth=1) +\n  labs(color = \"Mean Difference\")+\n  theme_minimal()\n\n\n\n\n\\(|\\Delta_{mean}|\\)"
+  },
+  {
+    "objectID": "simulation.html#factor-3-type-1-error-level",
+    "href": "simulation.html#factor-3-type-1-error-level",
+    "title": "Mini Project 2: Simulation",
+    "section": "Factor 3: Type 1 Error Level",
+    "text": "Factor 3: Type 1 Error Level\n\nmean1 &lt;- 225\niter &lt;- 10\nsd1 &lt;- 35\ntype_1_error_level &lt;- sample(seq(0.01, 0.9, by = 0.01), iter, replace = TRUE)\n\n\ncombined_data_error &lt;- tibble(n_per_group = numeric(), power = numeric(), error_level = numeric())\ntype_1_error_level\n\n [1] 0.69 0.67 0.85 0.45 0.80 0.30 0.61 0.63 0.29 0.47\n\nfor (val in type_1_error_level) {\n  print(val)\n  result &lt;- power_stat_test(mean1, 0, sd1, 0, val, numsims, iter)\n  temp_data &lt;- tibble(n_per_group = result[[1]], power = result[[2]], error_level = rep(val, length(result[[1]])))\n  combined_data_error &lt;- rbind(combined_data_error, temp_data)\n}\n\n[1] 0.69\n[1] 0.67\n[1] 0.85\n[1] 0.45\n[1] 0.8\n[1] 0.3\n[1] 0.61\n[1] 0.63\n[1] 0.29\n[1] 0.47\n\ncombined_data_error\n\n# A tibble: 100 × 3\n   n_per_group power error_level\n         &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt;\n 1           5 0.681        0.69\n 2          10 0.69         0.69\n 3          15 0.716        0.69\n 4          20 0.699        0.69\n 5          25 0.7          0.69\n 6          30 0.695        0.69\n 7          35 0.684        0.69\n 8          40 0.683        0.69\n 9          45 0.678        0.69\n10          50 0.713        0.69\n# ℹ 90 more rows\n\n\n\nggplot(combined_data_error, aes(x = n_per_group, y = power, color = fct_reorder2(as.factor(error_level),n_per_group,power))) +\n  geom_line(linewidth=0.8) +\n  geom_hline(yintercept = 0.8, color = \"red\", linewidth=1) +\n  labs(color = \"Type I Error\")+\n  theme_minimal()"
+  },
+  {
+    "objectID": "simulation.html#factor-4-sample-size",
+    "href": "simulation.html#factor-4-sample-size",
+    "title": "Mini Project 2: Simulation",
+    "section": "Factor 4: Sample size",
+    "text": "Factor 4: Sample size\n\npower_stat_test &lt;- function(mean1, mean_diff, sd1, type_1_error_level, numsims, sample_sizes){\n  power_vals &lt;- numeric(length(sample_sizes))\n  sample_size &lt;- numeric(length(sample_sizes))\n  \n  mean2 &lt;- mean1 + mean_diff\n  \n  for (k in seq_along(sample_sizes))  {\n    significant &lt;- numeric(numsims)\n    n1 &lt;- sample_sizes[k]\n    n2 &lt;- n1\n    for (i in 1:numsims) {\n      samp1 &lt;- rnorm(n1, mean1, sd1)\n      samp2 &lt;- rnorm(n2, mean2, sd1) # Notice sd2 is removed or kept constant as sd1\n      p_value &lt;- t.test(x = samp1, y = samp2)$p.value\n      significant[i] &lt;- (p_value &lt; type_1_error_level)\n    }\n    power_vals[k] &lt;- mean(significant)\n    sample_size[k] &lt;- n1\n  }\n  return(list(sample_size = sample_size, power = power_vals))\n}\n\n\nnumsims &lt;- 1000\nmean1 &lt;- 225\nsd1 &lt;- 35\nmean_diff &lt;- 10 # Assuming you're interested in a specific mean difference\ntype_1_error_level &lt;- 0.05\nsample_sizes &lt;- seq(10, 1000, by = 50) # Example range of sample sizes\n\nresult &lt;- power_stat_test(mean1, mean_diff, sd1, type_1_error_level, numsims, sample_sizes)\n\n# Plotting the results\nlibrary(ggplot2)\nggplot(data = data.frame(sample_size = result$sample_size, power = result$power), aes(x = sample_size, y = power)) +\n  geom_line() +\n  geom_point() +\n  geom_hline(yintercept = 0.8, linetype = \"dashed\", color = \"red\") +\n  theme_minimal() +\n  labs(title = \"Power of Statistical Test vs. Sample Size\",\n       x = \"Sample Size\",\n       y = \"Power\")"
+  },
+  {
+    "objectID": "simulation.html#the-effects-of-two-factors-on-the-power-of-a-statistical-test",
+    "href": "simulation.html#the-effects-of-two-factors-on-the-power-of-a-statistical-test",
+    "title": "Mini Project 2: Simulation",
+    "section": "The Effects of Two Factors On The Power of A Statistical Test",
+    "text": "The Effects of Two Factors On The Power of A Statistical Test\nThere are some factors that affect the power of a statistical test:\n\nsample size\ntype I error level\nvariability in the data\nsize of the true difference\n\nwhy intercept at 0.8: To evaluate the effects for two factors, I created a generalized function to compute the power of each statistical test:\n\npower_stat_test &lt;- function(mean1, mean_diff, sd1, sd_diff, type_1_error_level, numsims,iter){\n  #list of power values after all iterations \n  power_vals &lt;- vector(\"double\",iter)\n  #list of sample size value\n  sample_size &lt;- vector(\"numeric\",iter)\n  #calculate the mean of the second group\n  mean2 &lt;- mean1 + mean_diff\n  #calculate the standard deviation of the second group\n  sd2 &lt;- sd1 + sd_diff\n  for (k in 1:iter)  {\n    significant &lt;- vector(\"logical\", numsims)\n    n1 &lt;- 5 * k\n    n2 &lt;- n1\n    for (i in 1:numsims) {\n      samp1 &lt;- rnorm(n1, mean1, sd1)\n      samp2 &lt;- rnorm(n2, mean2, sd2)\n      p_value &lt;- t.test(x = samp1, y = samp2)$p.value\n      significant[i] &lt;- (p_value &lt; type_1_error_level)\n    }\n    power_vals[k] &lt;- mean(significant)\n    sample_size[k] &lt;- n1\n  }\n  return(list(sample_size,power_vals))\n}\n\nThis function takes the parameters:\n\n\n\n\n\n\n\nParameter\nPurpose\n\n\n\n\nmean1\nThe mean value of the first group\n\n\nmean_diff\nThe true difference in mean value of two groups\n\n\nsd1\nThe standard deviation of the first group\n\n\nsd_diff\nThe difference in standard deviation of two groups\n\n\ntype_1_error_level\nType I error level or the risk of making a Type I error\n\n\nnumsims\nNumber of statistics tests on the same simulated data set (=1000)\n\n\niter\nThis value used for the purpose of testing the simulated data set with a factor changing over the time and other factors remain the same\n\n\n\nI set this value large to…\n\nmean1 &lt;- 225\niter &lt;- 10\ntype_1_error_level &lt;- 0.05\nnumsims &lt;- 1000\nsd1 &lt;- 35"
   }
 ]

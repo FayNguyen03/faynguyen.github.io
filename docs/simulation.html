@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Fay Nguyen - Simulation</title>
+<title>Fay Nguyen - Mini Project 2: Simulation</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -60,6 +94,8 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -92,16 +128,23 @@ ul.task-list li input[type="checkbox"] {
     <ul class="dropdown-menu" aria-labelledby="nav-menu-projects">    
         <li>
     <a class="dropdown-item" href="./map.html" rel="" target="">
- <span class="dropdown-text">Maps</span></a>
+ <span class="dropdown-text">Mini Project 1: Maps</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./simulation.html" rel="" target="">
- <span class="dropdown-text">Simulation</span></a>
+ <span class="dropdown-text">Mini Project 2: Simulation</span></a>
   </li>  
     </ul>
   </li>
 </ul>
-            <div class="quarto-navbar-tools ms-auto">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/FayNguyen03" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
 </div>
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
@@ -111,7 +154,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./simulation.html">Simulation</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./simulation.html">Mini Project 2: Simulation</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
     </div>
@@ -126,13 +169,13 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./map.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Maps</span></a>
+ <span class="menu-text">Mini Project 1: Maps</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./simulation.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Simulation</span></a>
+ <span class="menu-text">Mini Project 2: Simulation</span></a>
   </div>
 </li>
     </ul>
@@ -141,14 +184,24 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-effects-of-two-factors-on-the-power-of-a-statistical-test" id="toc-the-effects-of-two-factors-on-the-power-of-a-statistical-test" class="nav-link active" data-scroll-target="#the-effects-of-two-factors-on-the-power-of-a-statistical-test">The Effects of Two Factors On The Power of A Statistical Test</a></li>
+  <li><a href="#factor-1-variance" id="toc-factor-1-variance" class="nav-link" data-scroll-target="#factor-1-variance">Factor 1: Variance</a></li>
+  <li><a href="#factor-2-size-of-the-true-difference" id="toc-factor-2-size-of-the-true-difference" class="nav-link" data-scroll-target="#factor-2-size-of-the-true-difference">Factor 2: Size of the true difference</a></li>
+  <li><a href="#factor-3-type-1-error-level" id="toc-factor-3-type-1-error-level" class="nav-link" data-scroll-target="#factor-3-type-1-error-level">Factor 3: Type 1 Error Level</a></li>
+  <li><a href="#factor-4-sample-size" id="toc-factor-4-sample-size" class="nav-link" data-scroll-target="#factor-4-sample-size">Factor 4: Sample size</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Simulation</h1>
+<h1 class="title">Mini Project 2: Simulation</h1>
 </div>
 
 
@@ -163,8 +216,289 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="the-effects-of-two-factors-on-the-power-of-a-statistical-test" class="level2">
+<h2 class="anchored" data-anchor-id="the-effects-of-two-factors-on-the-power-of-a-statistical-test">The Effects of Two Factors On The Power of A Statistical Test</h2>
+<p>There are some factors that affect the power of a statistical test:</p>
+<ol type="1">
+<li><p>sample size</p></li>
+<li><p>type I error level</p></li>
+<li><p>variability in the data</p></li>
+<li><p>size of the true difference</p></li>
+</ol>
+<p>why intercept at 0.8: To evaluate the effects for two factors, I created a generalized function to compute the power of each statistical test:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>power_stat_test <span class="ot">&lt;-</span> <span class="cf">function</span>(mean1, mean_diff, sd1, sd_diff, type_1_error_level, numsims,iter){</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#list of power values after all iterations </span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  power_vals <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"double"</span>,iter)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#list of sample size value</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  sample_size <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"numeric"</span>,iter)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#calculate the mean of the second group</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  mean2 <span class="ot">&lt;-</span> mean1 <span class="sc">+</span> mean_diff</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">#calculate the standard deviation of the second group</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  sd2 <span class="ot">&lt;-</span> sd1 <span class="sc">+</span> sd_diff</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>iter)  {</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    significant <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"logical"</span>, numsims)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    n1 <span class="ot">&lt;-</span> <span class="dv">5</span> <span class="sc">*</span> k</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    n2 <span class="ot">&lt;-</span> n1</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>numsims) {</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>      samp1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n1, mean1, sd1)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>      samp2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n2, mean2, sd2)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>      p_value <span class="ot">&lt;-</span> <span class="fu">t.test</span>(<span class="at">x =</span> samp1, <span class="at">y =</span> samp2)<span class="sc">$</span>p.value</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>      significant[i] <span class="ot">&lt;-</span> (p_value <span class="sc">&lt;</span> type_1_error_level)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    power_vals[k] <span class="ot">&lt;-</span> <span class="fu">mean</span>(significant)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    sample_size[k] <span class="ot">&lt;-</span> n1</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(sample_size,power_vals))</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This function takes the parameters:</p>
+<table class="table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 66%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>mean1</code></td>
+<td>The mean value of the first group</td>
+</tr>
+<tr class="even">
+<td><code>mean_diff</code></td>
+<td>The true difference in mean value of two groups</td>
+</tr>
+<tr class="odd">
+<td><code>sd1</code></td>
+<td>The standard deviation of the first group</td>
+</tr>
+<tr class="even">
+<td><code>sd_diff</code></td>
+<td>The difference in standard deviation of two groups</td>
+</tr>
+<tr class="odd">
+<td><code>type_1_error_level</code></td>
+<td>Type I error level or the risk of making a Type I error</td>
+</tr>
+<tr class="even">
+<td><code>numsims</code></td>
+<td>Number of statistics tests on the same simulated data set (=1000)</td>
+</tr>
+<tr class="odd">
+<td><code>iter</code></td>
+<td>This value used for the purpose of testing the simulated data set with a factor changing over the time and other factors remain the same</td>
+</tr>
+</tbody>
+</table>
+<p><em>I set this value large to…</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mean1 <span class="ot">&lt;-</span> <span class="dv">225</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>iter <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>type_1_error_level <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>numsims <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>sd1 <span class="ot">&lt;-</span> <span class="dv">35</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="factor-1-variance" class="level2">
+<h2 class="anchored" data-anchor-id="factor-1-variance">Factor 1: Variance</h2>
+<p>Since we have <span class="math inline">\(\sigma=\sqrt{Variance}\)</span>, I created 2 groups with the same mean and sample size but difference in standard deviation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sd_diff <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">5</span><span class="sc">:</span><span class="dv">75</span>,iter)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>sd1 <span class="ot">&lt;-</span> <span class="dv">35</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>combined_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">n_per_group =</span> <span class="fu">numeric</span>(), <span class="at">power =</span> <span class="fu">numeric</span>(), <span class="at">sd_diff_val =</span> <span class="fu">numeric</span>())</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (val <span class="cf">in</span> sd_diff) {</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">power_stat_test</span>(mean1, <span class="dv">0</span>, sd1, val, type_1_error_level, numsims, iter)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  temp_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">n_per_group =</span> result[[<span class="dv">1</span>]], <span class="at">power =</span> result[[<span class="dv">2</span>]], <span class="at">sd_diff_val =</span> <span class="fu">rep</span>(val, <span class="fu">length</span>(result[[<span class="dv">1</span>]])))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  combined_data <span class="ot">&lt;-</span> <span class="fu">rbind</span>(combined_data, temp_data)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(combined_data, <span class="fu">aes</span>(<span class="at">x =</span> n_per_group, <span class="at">y =</span> power, <span class="at">color =</span> <span class="fu">as.factor</span>(sd_diff_val))) <span class="sc">+</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">"SD Difference"</span>)<span class="sc">+</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="simulation_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(combined_data, <span class="fu">aes</span>(<span class="at">x =</span> n_per_group, <span class="at">y =</span> power, <span class="at">color =</span> <span class="fu">fct_reorder2</span>(<span class="fu">as.factor</span>(sd_diff_val),n_per_group,power))) <span class="sc">+</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">"SD Difference"</span>)<span class="sc">+</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_discrete</span>(<span class="at">limits=</span><span class="fu">max</span>())<span class="sc">+</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in max(): no non-missing arguments to max; returning -Inf</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Continuous limits supplied to discrete scale.
+ℹ Did you mean `limits = factor(...)` or `scale_*_continuous()`?</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="simulation_files/figure-html/unnamed-chunk-6-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="factor-2-size-of-the-true-difference" class="level2">
+<h2 class="anchored" data-anchor-id="factor-2-size-of-the-true-difference">Factor 2: Size of the true difference</h2>
+<p>I created 2 groups with the same mean and sample size but difference in standard deviation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>mean1 <span class="ot">&lt;-</span> <span class="dv">225</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>iter <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>type_1_error_level <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>true_diff <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="sc">-</span><span class="dv">100</span><span class="sc">:</span><span class="dv">100</span>,iter)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>sd1 <span class="ot">&lt;-</span> <span class="dv">35</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>numsims <span class="ot">&lt;-</span> <span class="dv">1000</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let <code>mean1 = 225</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>combined_data_mean <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">n_per_group =</span> <span class="fu">numeric</span>(), <span class="at">power =</span> <span class="fu">numeric</span>(), <span class="at">true_diff_val =</span> <span class="fu">numeric</span>())</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (val <span class="cf">in</span> true_diff) {</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">power_stat_test</span>(mean1, val, sd1, <span class="dv">0</span>,type_1_error_level, numsims, iter)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  temp_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">n_per_group =</span> result[[<span class="dv">1</span>]], <span class="at">power =</span> result[[<span class="dv">2</span>]], <span class="at">true_diff_val =</span> <span class="fu">rep</span>(val, <span class="fu">length</span>(result[[<span class="dv">1</span>]])))</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  combined_data_mean <span class="ot">&lt;-</span> <span class="fu">rbind</span>(combined_data_mean, temp_data)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(combined_data_mean, <span class="fu">aes</span>(<span class="at">x =</span> n_per_group, <span class="at">y =</span> power, <span class="at">color =</span> <span class="fu">fct_reorder2</span>(<span class="fu">as.factor</span>(true_diff_val),n_per_group,power))) <span class="sc">+</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth=</span><span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">"Mean Difference"</span>)<span class="sc">+</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="simulation_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><span class="math inline">\(|\Delta_{mean}|\)</span></p>
+</section>
+<section id="factor-3-type-1-error-level" class="level2">
+<h2 class="anchored" data-anchor-id="factor-3-type-1-error-level">Factor 3: Type 1 Error Level</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>mean1 <span class="ot">&lt;-</span> <span class="dv">225</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>iter <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>sd1 <span class="ot">&lt;-</span> <span class="dv">35</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>type_1_error_level <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq</span>(<span class="fl">0.01</span>, <span class="fl">0.9</span>, <span class="at">by =</span> <span class="fl">0.01</span>), iter, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>combined_data_error <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">n_per_group =</span> <span class="fu">numeric</span>(), <span class="at">power =</span> <span class="fu">numeric</span>(), <span class="at">error_level =</span> <span class="fu">numeric</span>())</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>type_1_error_level</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 0.69 0.67 0.85 0.45 0.80 0.30 0.61 0.63 0.29 0.47</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (val <span class="cf">in</span> type_1_error_level) {</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(val)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">power_stat_test</span>(mean1, <span class="dv">0</span>, sd1, <span class="dv">0</span>, val, numsims, iter)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  temp_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">n_per_group =</span> result[[<span class="dv">1</span>]], <span class="at">power =</span> result[[<span class="dv">2</span>]], <span class="at">error_level =</span> <span class="fu">rep</span>(val, <span class="fu">length</span>(result[[<span class="dv">1</span>]])))</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  combined_data_error <span class="ot">&lt;-</span> <span class="fu">rbind</span>(combined_data_error, temp_data)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.69
+[1] 0.67
+[1] 0.85
+[1] 0.45
+[1] 0.8
+[1] 0.3
+[1] 0.61
+[1] 0.63
+[1] 0.29
+[1] 0.47</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>combined_data_error</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 100 × 3
+   n_per_group power error_level
+         &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt;
+ 1           5 0.681        0.69
+ 2          10 0.69         0.69
+ 3          15 0.716        0.69
+ 4          20 0.699        0.69
+ 5          25 0.7          0.69
+ 6          30 0.695        0.69
+ 7          35 0.684        0.69
+ 8          40 0.683        0.69
+ 9          45 0.678        0.69
+10          50 0.713        0.69
+# ℹ 90 more rows</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(combined_data_error, <span class="fu">aes</span>(<span class="at">x =</span> n_per_group, <span class="at">y =</span> power, <span class="at">color =</span> <span class="fu">fct_reorder2</span>(<span class="fu">as.factor</span>(error_level),n_per_group,power))) <span class="sc">+</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth=</span><span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">"Type I Error"</span>)<span class="sc">+</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="simulation_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="factor-4-sample-size" class="level2">
+<h2 class="anchored" data-anchor-id="factor-4-sample-size">Factor 4: Sample size</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>power_stat_test <span class="ot">&lt;-</span> <span class="cf">function</span>(mean1, mean_diff, sd1, type_1_error_level, numsims, sample_sizes){</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  power_vals <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(sample_sizes))</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  sample_size <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(sample_sizes))</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  mean2 <span class="ot">&lt;-</span> mean1 <span class="sc">+</span> mean_diff</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (k <span class="cf">in</span> <span class="fu">seq_along</span>(sample_sizes))  {</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    significant <span class="ot">&lt;-</span> <span class="fu">numeric</span>(numsims)</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    n1 <span class="ot">&lt;-</span> sample_sizes[k]</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>    n2 <span class="ot">&lt;-</span> n1</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>numsims) {</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>      samp1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n1, mean1, sd1)</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>      samp2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n2, mean2, sd1) <span class="co"># Notice sd2 is removed or kept constant as sd1</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>      p_value <span class="ot">&lt;-</span> <span class="fu">t.test</span>(<span class="at">x =</span> samp1, <span class="at">y =</span> samp2)<span class="sc">$</span>p.value</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>      significant[i] <span class="ot">&lt;-</span> (p_value <span class="sc">&lt;</span> type_1_error_level)</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>    power_vals[k] <span class="ot">&lt;-</span> <span class="fu">mean</span>(significant)</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>    sample_size[k] <span class="ot">&lt;-</span> n1</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">sample_size =</span> sample_size, <span class="at">power =</span> power_vals))</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>numsims <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>mean1 <span class="ot">&lt;-</span> <span class="dv">225</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>sd1 <span class="ot">&lt;-</span> <span class="dv">35</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>mean_diff <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="co"># Assuming you're interested in a specific mean difference</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>type_1_error_level <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>sample_sizes <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">10</span>, <span class="dv">1000</span>, <span class="at">by =</span> <span class="dv">50</span>) <span class="co"># Example range of sample sizes</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">power_stat_test</span>(mean1, mean_diff, sd1, type_1_error_level, numsims, sample_sizes)</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting the results</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">sample_size =</span> result<span class="sc">$</span>sample_size, <span class="at">power =</span> result<span class="sc">$</span>power), <span class="fu">aes</span>(<span class="at">x =</span> sample_size, <span class="at">y =</span> power)) <span class="sc">+</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.8</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Power of Statistical Test vs. Sample Size"</span>,</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Sample Size"</span>,</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Power"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="simulation_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

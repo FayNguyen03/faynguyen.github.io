@@ -1,6 +1,6 @@
-|                                     |
-|-------------------------------------|
-| title: "Mini Project 2: Simulation" |
+---
+title: "Mini Project 2: Simulation"
+---
 
 ```{r}
 #| message: false
@@ -24,7 +24,7 @@ There are some factors that affect the power of a statistical test:
 
 4.  size of the true difference
 
-To evaluate the effects for two factors, I created a generalized function to compute the power of each statistical test:
+why intercept at 0.8: To evaluate the effects for two factors, I created a generalized function to compute the power of each statistical test:
 
 ```{r}
 power_stat_test <- function(mean1, mean_diff, sd1, sd_diff, type_1_error_level, numsims,iter){
@@ -56,7 +56,7 @@ power_stat_test <- function(mean1, mean_diff, sd1, sd_diff, type_1_error_level, 
 This function takes the parameters:
 
 | Parameter            | Purpose                                                                                                                                  |
-|------------------------|------------------------------------------------|
+|------------------------|-----------------------------------------------|
 | `mean1`              | The mean value of the first group                                                                                                        |
 | `mean_diff`          | The true difference in mean value of two groups                                                                                          |
 | `sd1`                | The standard deviation of the first group                                                                                                |
@@ -68,27 +68,24 @@ This function takes the parameters:
 *I set this value large to...*
 
 ```{r}
+mean1 <- 225
+iter <- 10
+type_1_error_level <- 0.05
 numsims <- 1000
+sd1 <- 35
 ```
-
 
 ## Factor 1: Variance
 
 Since we have $\sigma=\sqrt{Variance}$, I created 2 groups with the same mean and sample size but difference in standard deviation.
 
 ```{r}
-mean1 <- 225
-iter <- 10
-type_1_error_level <- 0.05
 sd_diff <- sample(5:75,iter)
 ```
-
-Let `sd1 = 35`.
 
 ```{r}
 sd1 <- 35
 ```
-
 
 ```{r}
 combined_data <- tibble(n_per_group = numeric(), power = numeric(), sd_diff_val = numeric())
@@ -105,7 +102,7 @@ ggplot(combined_data, aes(x = n_per_group, y = power, color = as.factor(sd_diff_
   labs(color = "SD Difference")+
   theme_minimal()
 
-ggplot(combined_data, aes(x = n_per_group, y = power, color = as.factor(sd_diff_val))) +
+ggplot(combined_data, aes(x = n_per_group, y = power, color = fct_reorder2(as.factor(sd_diff_val),n_per_group,power))) +
   geom_line() +
   labs(color = "SD Difference")+
   scale_y_discrete(limits=max())+
@@ -154,13 +151,14 @@ $|\Delta_{mean}|$
 mean1 <- 225
 iter <- 10
 sd1 <- 35
-type_1_error_level <-  sample(0.01,0.9,iter)
+type_1_error_level <- sample(seq(0.01, 0.9, by = 0.01), iter, replace = TRUE)
 ```
 
 ```{r}
-combined_data_error <- tibble(n_per_group = numeric(), power = numeric(), error_val = numeric())
-
+combined_data_error <- tibble(n_per_group = numeric(), power = numeric(), error_level = numeric())
+type_1_error_level
 for (val in type_1_error_level) {
+  print(val)
   result <- power_stat_test(mean1, 0, sd1, 0, val, numsims, iter)
   temp_data <- tibble(n_per_group = result[[1]], power = result[[2]], error_level = rep(val, length(result[[1]])))
   combined_data_error <- rbind(combined_data_error, temp_data)
@@ -169,7 +167,7 @@ combined_data_error
 ```
 
 ```{r}
-ggplot(combined_data_error, aes(x = n_per_group, y = power, color = as.factor(error_val))) +
+ggplot(combined_data_error, aes(x = n_per_group, y = power, color = fct_reorder2(as.factor(error_level),n_per_group,power))) +
   geom_line(linewidth=0.8) +
   geom_hline(yintercept = 0.8, color = "red", linewidth=1) +
   labs(color = "Type I Error")+
@@ -178,3 +176,50 @@ ggplot(combined_data_error, aes(x = n_per_group, y = power, color = as.factor(er
 ```
 
 ## Factor 4: Sample size
+
+```{r}
+power_stat_test <- function(mean1, mean_diff, sd1, type_1_error_level, numsims, sample_sizes){
+  power_vals <- numeric(length(sample_sizes))
+  sample_size <- numeric(length(sample_sizes))
+  
+  mean2 <- mean1 + mean_diff
+  
+  for (k in seq_along(sample_sizes))  {
+    significant <- numeric(numsims)
+    n1 <- sample_sizes[k]
+    n2 <- n1
+    for (i in 1:numsims) {
+      samp1 <- rnorm(n1, mean1, sd1)
+      samp2 <- rnorm(n2, mean2, sd1) # Notice sd2 is removed or kept constant as sd1
+      p_value <- t.test(x = samp1, y = samp2)$p.value
+      significant[i] <- (p_value < type_1_error_level)
+    }
+    power_vals[k] <- mean(significant)
+    sample_size[k] <- n1
+  }
+  return(list(sample_size = sample_size, power = power_vals))
+}
+```
+
+```{r}
+numsims <- 1000
+mean1 <- 225
+sd1 <- 35
+mean_diff <- 10 # Assuming you're interested in a specific mean difference
+type_1_error_level <- 0.05
+sample_sizes <- seq(10, 1000, by = 50) # Example range of sample sizes
+
+result <- power_stat_test(mean1, mean_diff, sd1, type_1_error_level, numsims, sample_sizes)
+
+# Plotting the results
+library(ggplot2)
+ggplot(data = data.frame(sample_size = result$sample_size, power = result$power), aes(x = sample_size, y = power)) +
+  geom_line() +
+  geom_point() +
+  geom_hline(yintercept = 0.8, linetype = "dashed", color = "red") +
+  theme_minimal() +
+  labs(title = "Power of Statistical Test vs. Sample Size",
+       x = "Sample Size",
+       y = "Power")
+
+```
