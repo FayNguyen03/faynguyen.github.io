@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Fay Nguyen - Mini Project 2: Simulation</title>
+<title>Fay Nguyen - Mini Project 2: Simulation - The Effects of Two Factors On The Power of A Statistical Test</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -132,7 +132,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
         <li>
     <a class="dropdown-item" href="./simulation.html" rel="" target="">
- <span class="dropdown-text">Mini Project 2: Simulation</span></a>
+ <span class="dropdown-text">Mini Project 2: Simulation - The Effects of Two Factors On The Power of A Statistical Test</span></a>
   </li>  
     </ul>
   </li>
@@ -154,7 +154,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./simulation.html">Mini Project 2: Simulation</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./simulation.html">Mini Project 2: Simulation - The Effects of Two Factors On The Power of A Statistical Test</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
     </div>
@@ -175,7 +175,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./simulation.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Mini Project 2: Simulation</span></a>
+ <span class="menu-text">Mini Project 2: Simulation - The Effects of Two Factors On The Power of A Statistical Test</span></a>
   </div>
 </li>
     </ul>
@@ -188,7 +188,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#the-effects-of-two-factors-on-the-power-of-a-statistical-test" id="toc-the-effects-of-two-factors-on-the-power-of-a-statistical-test" class="nav-link active" data-scroll-target="#the-effects-of-two-factors-on-the-power-of-a-statistical-test">The Effects of Two Factors On The Power of A Statistical Test</a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview:</a></li>
   <li><a href="#factor-1-variance" id="toc-factor-1-variance" class="nav-link" data-scroll-target="#factor-1-variance">Factor 1: Variance</a></li>
   <li><a href="#factor-2-size-of-the-true-difference" id="toc-factor-2-size-of-the-true-difference" class="nav-link" data-scroll-target="#factor-2-size-of-the-true-difference">Factor 2: Size of the true difference</a></li>
   <li><a href="#factor-3-type-1-error-level" id="toc-factor-3-type-1-error-level" class="nav-link" data-scroll-target="#factor-3-type-1-error-level">Factor 3: Type 1 Error Level</a></li>
@@ -201,7 +201,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Mini Project 2: Simulation</h1>
+<h1 class="title">Mini Project 2: Simulation - The Effects of Two Factors On The Power of A Statistical Test</h1>
 </div>
 
 
@@ -222,16 +222,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="the-effects-of-two-factors-on-the-power-of-a-statistical-test" class="level2">
-<h2 class="anchored" data-anchor-id="the-effects-of-two-factors-on-the-power-of-a-statistical-test">The Effects of Two Factors On The Power of A Statistical Test</h2>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview:</h2>
+<p><strong>Power of a statistical test</strong>: the probability that it rejects the null hypothesis when the null hypothesis is false or the probability that a statistical test can detect when a true difference exists</p>
 <p>There are some factors that affect the power of a statistical test:</p>
 <ol type="1">
-<li><p>sample size</p></li>
-<li><p>type I error level</p></li>
-<li><p>variability in the data</p></li>
-<li><p>size of the true difference</p></li>
+<li><p>Variability in the data (variance)</p></li>
+<li><p>True difference</p></li>
+<li><p>Type I Error Level</p></li>
+<li><p>Size of the sample</p></li>
 </ol>
-<p>why intercept at 0.8: To evaluate the effects for two factors, I created a generalized function to compute the power of each statistical test:</p>
+<p>While we evaluate the effect of these factors on the power, we will intercept at 0.8:</p>
+<p>To evaluate the effects for two factors, I created a generalized function to compute the power of each statistical test:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>power_stat_test <span class="ot">&lt;-</span> <span class="cf">function</span>(mean1, mean_diff, sd1, sd_diff, type_1_error_level, numsims,iter){</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#list of power values after all iterations </span></span>
@@ -301,7 +303,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-<p><em>I set this value large to…</em></p>
+<p>I initialized the constant values as below:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mean1 <span class="ot">&lt;-</span> <span class="dv">225</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>iter <span class="ot">&lt;-</span> <span class="dv">10</span></span>
@@ -312,7 +314,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="factor-1-variance" class="level2">
 <h2 class="anchored" data-anchor-id="factor-1-variance">Factor 1: Variance</h2>
-<p>Since we have <span class="math inline">\(\sigma=\sqrt{Variance}\)</span>, I created 2 groups with the same mean and sample size but difference in standard deviation.</p>
+<p>The first Since we have <span class="math inline">\(\sigma=\sqrt{Variance}\)</span>, I created 2 groups with the same mean and sample size but difference in standard deviation.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sd_diff <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">5</span><span class="sc">:</span><span class="dv">75</span>,iter)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -392,13 +394,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>mean1 <span class="ot">&lt;-</span> <span class="dv">225</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>iter <span class="ot">&lt;-</span> <span class="dv">10</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>sd1 <span class="ot">&lt;-</span> <span class="dv">35</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>type_1_error_level <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq</span>(<span class="fl">0.01</span>, <span class="fl">0.9</span>, <span class="at">by =</span> <span class="fl">0.01</span>), iter, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>type_1_error_level <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq</span>(<span class="fl">0.01</span>, <span class="fl">0.1</span>, <span class="at">by =</span> <span class="fl">0.01</span>), iter, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>combined_data_error <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">n_per_group =</span> <span class="fu">numeric</span>(), <span class="at">power =</span> <span class="fu">numeric</span>(), <span class="at">error_level =</span> <span class="fu">numeric</span>())</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>type_1_error_level</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] 0.69 0.67 0.85 0.45 0.80 0.30 0.61 0.63 0.29 0.47</code></pre>
+<pre><code> [1] 0.02 0.01 0.08 0.04 0.02 0.10 0.02 0.07 0.07 0.01</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (val <span class="cf">in</span> type_1_error_level) {</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(val)</span>
@@ -407,32 +409,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  combined_data_error <span class="ot">&lt;-</span> <span class="fu">rbind</span>(combined_data_error, temp_data)</span>
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.69
-[1] 0.67
-[1] 0.85
-[1] 0.45
-[1] 0.8
-[1] 0.3
-[1] 0.61
-[1] 0.63
-[1] 0.29
-[1] 0.47</code></pre>
+<pre><code>[1] 0.02
+[1] 0.01
+[1] 0.08
+[1] 0.04
+[1] 0.02
+[1] 0.1
+[1] 0.02
+[1] 0.07
+[1] 0.07
+[1] 0.01</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>combined_data_error</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 100 × 3
    n_per_group power error_level
          &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt;
- 1           5 0.681        0.69
- 2          10 0.69         0.69
- 3          15 0.716        0.69
- 4          20 0.699        0.69
- 5          25 0.7          0.69
- 6          30 0.695        0.69
- 7          35 0.684        0.69
- 8          40 0.683        0.69
- 9          45 0.678        0.69
-10          50 0.713        0.69
+ 1           5 0.021        0.02
+ 2          10 0.021        0.02
+ 3          15 0.018        0.02
+ 4          20 0.018        0.02
+ 5          25 0.031        0.02
+ 6          30 0.015        0.02
+ 7          35 0.02         0.02
+ 8          40 0.018        0.02
+ 9          45 0.021        0.02
+10          50 0.019        0.02
 # ℹ 90 more rows</code></pre>
 </div>
 </div>
