@@ -220,7 +220,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forcats)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="overview" class="level2">
 <h2 class="anchored" data-anchor-id="overview">Overview:</h2>
@@ -232,10 +233,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Type I Error Level</p></li>
 <li><p>Size of the sample</p></li>
 </ol>
-<p>While we evaluate the effect of these factors on the power, we will intercept at 0.8:</p>
-<p>To evaluate the effects for two factors, I created a generalized function to compute the power of each statistical test:</p>
+<p>While we evaluate the effect of these factors on the power, we will especially consider the intercept at 0.8. Power is usually set at 80%. This means that if there are true effects to be found in 100 different studies with 80% power, only 80 out of 100 statistical tests will actually detect them. The reason why we choose this value is that the minimum power of a study required is 80%.</p>
+<p>Below is a generalized function to compute the power of each statistical test based on the four important factors (size of sample, type I error level or significance leve, standard deviation, and difference in mean:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>power_stat_test <span class="ot">&lt;-</span> <span class="cf">function</span>(mean1, mean_diff, sd1, sd_diff, type_1_error_level, numsims,iter){</span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>power_stat_test <span class="ot">&lt;-</span> <span class="cf">function</span>(mean1, mean_diff, sd, type_1_error_level, numsims,iter){</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#list of power values after all iterations </span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  power_vals <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"double"</span>,iter)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#list of sample size value</span></span>
@@ -243,24 +244,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#calculate the mean of the second group</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  mean2 <span class="ot">&lt;-</span> mean1 <span class="sc">+</span> mean_diff</span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">#calculate the standard deviation of the second group</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  sd2 <span class="ot">&lt;-</span> sd1 <span class="sc">+</span> sd_diff</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>iter)  {</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    significant <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"logical"</span>, numsims)</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    n1 <span class="ot">&lt;-</span> <span class="dv">5</span> <span class="sc">*</span> k</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    n2 <span class="ot">&lt;-</span> n1</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>numsims) {</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>      samp1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n1, mean1, sd1)</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>      samp2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n2, mean2, sd2)</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>      p_value <span class="ot">&lt;-</span> <span class="fu">t.test</span>(<span class="at">x =</span> samp1, <span class="at">y =</span> samp2)<span class="sc">$</span>p.value</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>      significant[i] <span class="ot">&lt;-</span> (p_value <span class="sc">&lt;</span> type_1_error_level)</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    power_vals[k] <span class="ot">&lt;-</span> <span class="fu">mean</span>(significant)</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    sample_size[k] <span class="ot">&lt;-</span> n1</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(sample_size,power_vals))</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>iter)  {</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    significant <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"logical"</span>, numsims)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    n1 <span class="ot">&lt;-</span> <span class="dv">5</span> <span class="sc">*</span> k</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    n2 <span class="ot">&lt;-</span> n1</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>numsims) {</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>      samp1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n1, mean1, sd)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>      samp2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n2, mean2, sd)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>      p_value <span class="ot">&lt;-</span> <span class="fu">t.test</span>(<span class="at">x =</span> samp1, <span class="at">y =</span> samp2)<span class="sc">$</span>p.value</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>      significant[i] <span class="ot">&lt;-</span> (p_value <span class="sc">&lt;</span> type_1_error_level)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    power_vals[k] <span class="ot">&lt;-</span> <span class="fu">mean</span>(significant)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    sample_size[k] <span class="ot">&lt;-</span> n1</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(sample_size,power_vals))</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>This function takes the parameters:</p>
+<p>This function takes these parameters:</p>
 <table class="table">
 <colgroup>
 <col style="width: 33%">
@@ -282,50 +282,48 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>The true difference in mean value of two groups</td>
 </tr>
 <tr class="odd">
-<td><code>sd1</code></td>
-<td>The standard deviation of the first group</td>
+<td><code>sd</code></td>
+<td>The standard deviation of two groups</td>
 </tr>
 <tr class="even">
-<td><code>sd_diff</code></td>
-<td>The difference in standard deviation of two groups</td>
-</tr>
-<tr class="odd">
 <td><code>type_1_error_level</code></td>
 <td>Type I error level or the risk of making a Type I error</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>numsims</code></td>
 <td>Number of statistics tests on the same simulated data set (=1000)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>iter</code></td>
 <td>This value used for the purpose of testing the simulated data set with a factor changing over the time and other factors remain the same</td>
 </tr>
 </tbody>
 </table>
-<p>I initialized the constant values as below:</p>
+<p>Some parameters can be constant between tests so I will initialize it here:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mean1 <span class="ot">&lt;-</span> <span class="dv">225</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>iter <span class="ot">&lt;-</span> <span class="dv">10</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>type_1_error_level <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>numsims <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>sd1 <span class="ot">&lt;-</span> <span class="dv">35</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>sd <span class="ot">&lt;-</span> <span class="dv">35</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="factor-1-variance" class="level2">
 <h2 class="anchored" data-anchor-id="factor-1-variance">Factor 1: Variance</h2>
-<p>The first Since we have <span class="math inline">\(\sigma=\sqrt{Variance}\)</span>, I created 2 groups with the same mean and sample size but difference in standard deviation.</p>
+<p>The first factor we are going to examine is <strong>variance</strong>. We will evaluate <span class="math inline">\(\sigma=\sqrt{Variance}\)</span>.</p>
+<p>This is a list of randomized standard deviation.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sd_diff <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">5</span><span class="sc">:</span><span class="dv">75</span>,iter)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sd_diff <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">5</span><span class="sc">:</span><span class="dv">75</span>,iter)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(sd_diff)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 61 65 60 21 47 69 37 22 54 25</code></pre>
+</div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>sd1 <span class="ot">&lt;-</span> <span class="dv">35</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>combined_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">n_per_group =</span> <span class="fu">numeric</span>(), <span class="at">power =</span> <span class="fu">numeric</span>(), <span class="at">sd_diff_val =</span> <span class="fu">numeric</span>())</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#A list storing the results</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>combined_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">n_per_group =</span> <span class="fu">numeric</span>(), <span class="at">power =</span> <span class="fu">numeric</span>(), <span class="at">sd_diff_val =</span> <span class="fu">numeric</span>())</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (val <span class="cf">in</span> sd_diff) {</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">power_stat_test</span>(mean1, <span class="dv">0</span>, sd1, val, type_1_error_level, numsims, iter)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">power_stat_test</span>(mean1, <span class="dv">0</span>, val, type_1_error_level, numsims, iter)</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  temp_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">n_per_group =</span> result[[<span class="dv">1</span>]], <span class="at">power =</span> result[[<span class="dv">2</span>]], <span class="at">sd_diff_val =</span> <span class="fu">rep</span>(val, <span class="fu">length</span>(result[[<span class="dv">1</span>]])))</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  combined_data <span class="ot">&lt;-</span> <span class="fu">rbind</span>(combined_data, temp_data)</span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>}</span>
@@ -334,170 +332,89 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">"SD Difference"</span>)<span class="sc">+</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Sample Size"</span>, <span class="at">y =</span> <span class="st">"Power"</span>, <span class="at">color=</span><span class="st">"Standard deviation"</span>,<span class="at">title=</span><span class="st">"Power of statistical tests with different standard deviation"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="simulation_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
-</div>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(combined_data, <span class="fu">aes</span>(<span class="at">x =</span> n_per_group, <span class="at">y =</span> power, <span class="at">color =</span> <span class="fu">fct_reorder2</span>(<span class="fu">as.factor</span>(sd_diff_val),n_per_group,power))) <span class="sc">+</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">"SD Difference"</span>)<span class="sc">+</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_discrete</span>(<span class="at">limits=</span><span class="fu">max</span>())<span class="sc">+</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in max(): no non-missing arguments to max; returning -Inf</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Continuous limits supplied to discrete scale.
-ℹ Did you mean `limits = factor(...)` or `scale_*_continuous()`?</code></pre>
-</div>
-<div class="cell-output-display">
-<p><img src="simulation_files/figure-html/unnamed-chunk-6-2.png" class="img-fluid" width="672"></p>
+<p><img src="simulation_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p>Though the power of each case is approximately the same, according to the legend that is sorted based on the power and the sample size, the cases with smaller deviation seems to have larger power.</p>
+<p>Experimenters can control the standard deviation by sampling a homogeneous population of subjects, by reducing random measurement error and/or by making sure the experimental procedures are applied very consistent.</p>
 </section>
 <section id="factor-2-size-of-the-true-difference" class="level2">
 <h2 class="anchored" data-anchor-id="factor-2-size-of-the-true-difference">Factor 2: Size of the true difference</h2>
-<p>I created 2 groups with the same mean and sample size but difference in standard deviation.</p>
+<p>Next, we will evaluate the factor true difference, which is <span class="math inline">\(|\Delta_{mean1-mean2}|\)</span>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>mean1 <span class="ot">&lt;-</span> <span class="dv">225</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>iter <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>type_1_error_level <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>true_diff <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="sc">-</span><span class="dv">100</span><span class="sc">:</span><span class="dv">100</span>,iter)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>sd1 <span class="ot">&lt;-</span> <span class="dv">35</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>numsims <span class="ot">&lt;-</span> <span class="dv">1000</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>true_diff <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">100</span>,iter)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(true_diff)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 49 62 70 57 99 13 54 12 39 85</code></pre>
 </div>
-<p>Let <code>mean1 = 225</code>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>combined_data_mean <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">n_per_group =</span> <span class="fu">numeric</span>(), <span class="at">power =</span> <span class="fu">numeric</span>(), <span class="at">true_diff_val =</span> <span class="fu">numeric</span>())</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (val <span class="cf">in</span> true_diff) {</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">power_stat_test</span>(mean1, val, sd1, <span class="dv">0</span>,type_1_error_level, numsims, iter)</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  temp_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">n_per_group =</span> result[[<span class="dv">1</span>]], <span class="at">power =</span> result[[<span class="dv">2</span>]], <span class="at">true_diff_val =</span> <span class="fu">rep</span>(val, <span class="fu">length</span>(result[[<span class="dv">1</span>]])))</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  combined_data_mean <span class="ot">&lt;-</span> <span class="fu">rbind</span>(combined_data_mean, temp_data)</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(combined_data_mean, <span class="fu">aes</span>(<span class="at">x =</span> n_per_group, <span class="at">y =</span> power, <span class="at">color =</span> <span class="fu">fct_reorder2</span>(<span class="fu">as.factor</span>(true_diff_val),n_per_group,power))) <span class="sc">+</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth=</span><span class="fl">0.8</span>) <span class="sc">+</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">"Mean Difference"</span>)<span class="sc">+</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>combined_data_mean <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">n_per_group =</span> <span class="fu">numeric</span>(), <span class="at">power =</span> <span class="fu">numeric</span>(), <span class="at">true_diff_val =</span> <span class="fu">numeric</span>())</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (val <span class="cf">in</span> true_diff) {</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">power_stat_test</span>(mean1, val, sd, type_1_error_level, numsims, iter)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  temp_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">n_per_group =</span> result[[<span class="dv">1</span>]], <span class="at">power =</span> result[[<span class="dv">2</span>]], <span class="at">true_diff_val =</span> <span class="fu">rep</span>(val, <span class="fu">length</span>(result[[<span class="dv">1</span>]])))</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  combined_data_mean <span class="ot">&lt;-</span> <span class="fu">rbind</span>(combined_data_mean, temp_data)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(combined_data_mean, </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> n_per_group, </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> power,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">color=</span><span class="fu">fct_reorder</span>(<span class="fu">as.factor</span>(true_diff_val),power))) <span class="sc">+</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth=</span><span class="fl">0.8</span>)<span class="sc">+</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Sample Size"</span>, </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Power"</span>, </span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">color=</span><span class="st">"True Difference"</span>,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">title=</span><span class="st">"Power of statiscal tests with different true difference"</span>)<span class="sc">+</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="simulation_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+<p><img src="simulation_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p><span class="math inline">\(|\Delta_{mean}|\)</span></p>
+<p>From the graph, we can see that the higher the true difference is, the higher the power is. As the sample size grows larger with significant true difference, the power approaches 1 faster.</p>
 </section>
 <section id="factor-3-type-1-error-level" class="level2">
 <h2 class="anchored" data-anchor-id="factor-3-type-1-error-level">Factor 3: Type 1 Error Level</h2>
+<p>The third factor we will evaluate is Type I Error Level <span class="math inline">\(\alpha\)</span>.</p>
+<p>This is a list of randomized Type I Error Level.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>mean1 <span class="ot">&lt;-</span> <span class="dv">225</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>iter <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>sd1 <span class="ot">&lt;-</span> <span class="dv">35</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>type_1_error_level <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq</span>(<span class="fl">0.01</span>, <span class="fl">0.1</span>, <span class="at">by =</span> <span class="fl">0.01</span>), iter, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>combined_data_error <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">n_per_group =</span> <span class="fu">numeric</span>(), <span class="at">power =</span> <span class="fu">numeric</span>(), <span class="at">error_level =</span> <span class="fu">numeric</span>())</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>type_1_error_level</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code> [1] 0.02 0.01 0.08 0.04 0.02 0.10 0.02 0.07 0.07 0.01</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (val <span class="cf">in</span> type_1_error_level) {</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(val)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">power_stat_test</span>(mean1, <span class="dv">0</span>, sd1, <span class="dv">0</span>, val, numsims, iter)</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  temp_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">n_per_group =</span> result[[<span class="dv">1</span>]], <span class="at">power =</span> result[[<span class="dv">2</span>]], <span class="at">error_level =</span> <span class="fu">rep</span>(val, <span class="fu">length</span>(result[[<span class="dv">1</span>]])))</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  combined_data_error <span class="ot">&lt;-</span> <span class="fu">rbind</span>(combined_data_error, temp_data)</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.02
-[1] 0.01
-[1] 0.08
-[1] 0.04
-[1] 0.02
-[1] 0.1
-[1] 0.02
-[1] 0.07
-[1] 0.07
-[1] 0.01</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>combined_data_error</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 100 × 3
-   n_per_group power error_level
-         &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt;
- 1           5 0.021        0.02
- 2          10 0.021        0.02
- 3          15 0.018        0.02
- 4          20 0.018        0.02
- 5          25 0.031        0.02
- 6          30 0.015        0.02
- 7          35 0.02         0.02
- 8          40 0.018        0.02
- 9          45 0.021        0.02
-10          50 0.019        0.02
-# ℹ 90 more rows</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>type_1_error_level <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq</span>(<span class="fl">0.01</span>, <span class="fl">0.5</span>, <span class="at">by =</span> <span class="fl">0.01</span>), iter, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(combined_data_error, <span class="fu">aes</span>(<span class="at">x =</span> n_per_group, <span class="at">y =</span> power, <span class="at">color =</span> <span class="fu">fct_reorder2</span>(<span class="fu">as.factor</span>(error_level),n_per_group,power))) <span class="sc">+</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth=</span><span class="fl">0.8</span>) <span class="sc">+</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">"Type I Error"</span>)<span class="sc">+</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>combined_data_error <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">n_per_group =</span> <span class="fu">numeric</span>(), <span class="at">power =</span> <span class="fu">numeric</span>(), <span class="at">error_level =</span> <span class="fu">numeric</span>())</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>type_1_error_level</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 0.30 0.36 0.24 0.11 0.22 0.50 0.20 0.39 0.38 0.44</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (val <span class="cf">in</span> type_1_error_level) {</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">power_stat_test</span>(mean1,<span class="dv">10</span>, sd, val, numsims, iter)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  temp_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">n_per_group =</span> result[[<span class="dv">1</span>]], <span class="at">power =</span> result[[<span class="dv">2</span>]], <span class="at">error_level =</span> <span class="fu">rep</span>(val, <span class="fu">length</span>(result[[<span class="dv">1</span>]])))</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  combined_data_error <span class="ot">&lt;-</span> <span class="fu">rbind</span>(combined_data_error, temp_data)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(combined_data_error, <span class="fu">aes</span>(<span class="at">x =</span> n_per_group, <span class="at">y =</span> power, <span class="at">color =</span> <span class="fu">fct_reorder2</span>(<span class="fu">as.factor</span>(error_level),n_per_group,power))) <span class="sc">+</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth=</span><span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">"Type I Error"</span>)<span class="sc">+</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Sample Size"</span>, </span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Power"</span>, </span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">color=</span><span class="st">"Type I Error"</span>,</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">title=</span><span class="st">"Power of statiscal tests with different true difference"</span>)<span class="sc">+</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="simulation_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+<p><img src="simulation_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p>The relationship between the Type I Error Level and power: the more the the Type I Error Level is, the higher the power is. The stronger the evidence needed to reject the null hypothesis, the lower the chance that the hypothesis will be rejected.</p>
 </section>
 <section id="factor-4-sample-size" class="level2">
 <h2 class="anchored" data-anchor-id="factor-4-sample-size">Factor 4: Sample size</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>power_stat_test <span class="ot">&lt;-</span> <span class="cf">function</span>(mean1, mean_diff, sd1, type_1_error_level, numsims, sample_sizes){</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  power_vals <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(sample_sizes))</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  sample_size <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(sample_sizes))</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  mean2 <span class="ot">&lt;-</span> mean1 <span class="sc">+</span> mean_diff</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (k <span class="cf">in</span> <span class="fu">seq_along</span>(sample_sizes))  {</span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    significant <span class="ot">&lt;-</span> <span class="fu">numeric</span>(numsims)</span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    n1 <span class="ot">&lt;-</span> sample_sizes[k]</span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>    n2 <span class="ot">&lt;-</span> n1</span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>numsims) {</span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>      samp1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n1, mean1, sd1)</span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>      samp2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n2, mean2, sd1) <span class="co"># Notice sd2 is removed or kept constant as sd1</span></span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>      p_value <span class="ot">&lt;-</span> <span class="fu">t.test</span>(<span class="at">x =</span> samp1, <span class="at">y =</span> samp2)<span class="sc">$</span>p.value</span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>      significant[i] <span class="ot">&lt;-</span> (p_value <span class="sc">&lt;</span> type_1_error_level)</span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>    power_vals[k] <span class="ot">&lt;-</span> <span class="fu">mean</span>(significant)</span>
-<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>    sample_size[k] <span class="ot">&lt;-</span> n1</span>
-<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">sample_size =</span> sample_size, <span class="at">power =</span> power_vals))</span>
-<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>numsims <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>mean1 <span class="ot">&lt;-</span> <span class="dv">225</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>sd1 <span class="ot">&lt;-</span> <span class="dv">35</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>mean_diff <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="co"># Assuming you're interested in a specific mean difference</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>type_1_error_level <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>sample_sizes <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">10</span>, <span class="dv">1000</span>, <span class="at">by =</span> <span class="dv">50</span>) <span class="co"># Example range of sample sizes</span></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">power_stat_test</span>(mean1, mean_diff, sd1, type_1_error_level, numsims, sample_sizes)</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting the results</span></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">sample_size =</span> result<span class="sc">$</span>sample_size, <span class="at">power =</span> result<span class="sc">$</span>power), <span class="fu">aes</span>(<span class="at">x =</span> sample_size, <span class="at">y =</span> power)) <span class="sc">+</span></span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.8</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Power of Statistical Test vs. Sample Size"</span>,</span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Sample Size"</span>,</span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Power"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="simulation_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
+<p>From those graphs above, we can see an obvious pattern that the larger the sample size, the higher the power with other factors remain the same. Since sample size is typically under an experimenter’s control, increasing sample is one way to increase power.</p>
 
 
 </section>

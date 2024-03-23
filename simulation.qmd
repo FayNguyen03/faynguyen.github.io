@@ -27,7 +27,7 @@ There are some factors that affect the power of a statistical test:
 
 4.  Size of the sample
 
-While we evaluate the effect of these factors on the power, we will consider  intercept at 0.8. Power is usually set at 80%. This means that if there are true effects to be found in 100 different studies with 80% power, only 80 out of 100 statistical tests will actually detect them
+While we evaluate the effect of these factors on the power, we will especially consider the intercept at 0.8. Power is usually set at 80%. This means that if there are true effects to be found in 100 different studies with 80% power, only 80 out of 100 statistical tests will actually detect them. The reason why we choose this value is that the minimum power of a study required is 80%.
 
 Below is a generalized function to compute the power of each statistical test based on the four important factors (size of sample, type I error level or significance leve, standard deviation, and difference in mean:
 
@@ -145,8 +145,13 @@ ggplot(combined_data_mean,
 
 ```
 
-From the graph, we can see that the higher the true difference, the higher the power is.   
+From the graph, we can see that the higher the true difference is, the higher the power is. As the sample size grows larger with significant true difference, the power approaches 1 faster.
+
 ## Factor 3: Type 1 Error Level
+
+The third factor we will evaluate is Type I Error Level $\alpha$.
+
+This is a list of randomized Type I Error Level.
 
 ```{r}
 type_1_error_level <- sample(seq(0.01, 0.5, by = 0.01), iter, replace = TRUE)
