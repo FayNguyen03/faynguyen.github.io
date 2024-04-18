@@ -1,0 +1,84 @@
+---
+title: "Mini Project 3: Strings and Regular Expressions"
+---
+
+```{r,echo=FALSE,result=FALSE,message = FALSE}
+library(quarto)
+library(stringr)
+library(tidyverse)
+library(wordcloud2)
+library(dplyr)
+library(wordcloud)
+library(stopwords)
+```
+
+# INTRODUCTION
+https://towardsdatascience.com/what-songs-tell-us-about-text-mining-with-lyrics-ca80f98b3829
+# DATASET WRANGLING
+
+```{r}
+bts_lyrics <- read.csv("dataset/lyrics-v12.csv") %>%
+  filter(lyrics != "", repackaged != TRUE, !str_detect(eng_track_title, "Skit.*")) %>%
+  select(-kor_track_title, -id, -track_title, -has_full_ver, -repackaged) %>%
+  mutate(
+    lyrics = str_replace_all(lyrics, "\n", " "),  # Remove newlines
+    lyrics = str_replace_all(lyrics, "[\\(\\{][^\\)\\}]*[\\)\\}]", ""), 
+    lyrics = str_replace_all(lyrics, "[,\\*\\.!\`\'“”‘’]", ""),
+    lyrics = str_replace_all(lyrics, "\"", ""),
+    lyrics_cleaned = str_extract_all(lyrics, "\\b[A-Za-z]+\\b") %>%  
+      lapply(function(x) paste(x, collapse = " ")) 
+  )
+```
+
+
+# What are the words used in the lyrics?
+
+```{r}
+stopwordsList <- as_tibble(stopwords("en")) |> 
+  add_row(value="na")  |>
+  add_row(value="la")  |>
+  add_row(value="_") |>
+  add_row(value="oh") |>
+  add_row(value="yeah")
+stopwordsList <- stopwordsList[-c(4,8,12,13),]
+wordsLyrics <- str_split(bts_lyrics$lyrics_cleaned, "\\s+")
+wordsLyricsList <- unlist(wordsLyrics) 
+wordsLyricsList <- wordsLyricsList[str_detect(wordsLyricsList,"[A-Za-z']+$")]
+wordFreq <- as.data.frame(table(wordsLyricsList)) |>
+  mutate(wordsLyricsList = as.character(wordsLyricsList)) |>
+  anti_join(stopwordsList,by=c(wordsLyricsList="value")) |>
+  slice_max(Freq,n=300)
+```
+
+```{r}
+set.seed(2003)
+wordcloud2(data=wordFreq, size=1.6, color='random-dark')
+```
+
+## Emotion
+
+
+```{r}
+bts_lyrics_sentences <- read.csv("dataset/lyrics-v12.csv") %>%
+  filter(lyrics != "", repackaged != TRUE, !str_detect(eng_track_title, "Skit.*")) %>%
+  select(-kor_track_title, -id, -track_title, -has_full_ver, -repackaged) %>%
+  mutate(
+    lyrics = str_replace_all(lyrics, "[\\(\\{][^\\)\\}]*[\\)\\}]", ""), 
+    lyrics = str_replace_all(lyrics, "[,\\*\\.!\`“”‘’]", ""),
+    lyrics = str_replace_all(lyrics, "\"", "") 
+  ) 
+bts_lyrics_sentences$lyrics[1]
+```
+
+```{r}
+
+str_view(bts_lyrics_sentences$lyrics[2], '\n')
+sentenceLyricsList <- str_split(bts_lyrics_sentences$lyrics,"\n")
+sentenceLyricsList <- unlist(sentenceLyricsList) 
+wordsLyricsList <- wordsLyricsList[str_detect(wordsLyricsList,"[A-Za-z']+$")]
+wordFreq <- as.data.frame(table(wordsLyricsList)) |>
+  mutate(wordsLyricsList = as.character(wordsLyricsList)) |>
+  anti_join(stopwordsList,by=c(wordsLyricsList="value")) |>
+  slice_max(Freq,n=300)
+```
+

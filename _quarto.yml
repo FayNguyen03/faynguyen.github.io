@@ -20,6 +20,7 @@ website:
       contents:
         - map.qmd
         - simulation.qmd
+        - string_regex.qmd
        
       
   page-footer:
