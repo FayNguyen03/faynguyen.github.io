@@ -202,9 +202,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">INTRODUCTION</a></li>
-  <li><a href="#what-are-the-words-used-in-the-lyrics" id="toc-what-are-the-words-used-in-the-lyrics" class="nav-link" data-scroll-target="#what-are-the-words-used-in-the-lyrics">What are the words used in the lyrics?</a>
+  <li><a href="#dataset-wrangling" id="toc-dataset-wrangling" class="nav-link" data-scroll-target="#dataset-wrangling">DATASET WRANGLING</a></li>
+  <li><a href="#text-analysis" id="toc-text-analysis" class="nav-link" data-scroll-target="#text-analysis">TEXT ANALYSIS</a>
   <ul class="collapse">
-  <li><a href="#emotion" id="toc-emotion" class="nav-link" data-scroll-target="#emotion">Emotion</a></li>
+  <li><a href="#what-are-the-words-used-the-most-in-bts-lyrics" id="toc-what-are-the-words-used-the-most-in-bts-lyrics" class="nav-link" data-scroll-target="#what-are-the-words-used-the-most-in-bts-lyrics">What are the words used the most in BTS’ lyrics?</a></li>
+  <li><a href="#number-of-word-distribution-over-the-time" id="toc-number-of-word-distribution-over-the-time" class="nav-link" data-scroll-target="#number-of-word-distribution-over-the-time">Number of Word Distribution Over The Time</a></li>
+  <li><a href="#difference-in-number-of-words-performed-by-the-rap-team-the-vocal-team-and-the-whole-group" id="toc-difference-in-number-of-words-performed-by-the-rap-team-the-vocal-team-and-the-whole-group" class="nav-link" data-scroll-target="#difference-in-number-of-words-performed-by-the-rap-team-the-vocal-team-and-the-whole-group">Difference in Number of Words Performed by The Rap Team, The Vocal Team, and The Whole Group</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -231,152 +234,134 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="introduction" class="level1">
 <h1>INTRODUCTION</h1>
-<p>https://towardsdatascience.com/what-songs-tell-us-about-text-mining-with-lyrics-ca80f98b3829 # DATASET WRANGLING</p>
+<p>BTS (Bangtan Sonyeondan or “Beyond the Scene”) is a Grammy-nominated South Korean group that has been capturing the hearts of millions of fans globally since their debut in June 2013.</p>
+<p><img src="img/bts-pc.jpg" class="img-fluid"></p>
+<p>The members of BTS are RM, Jin, SUGA, j-hope, Jimin, V, and Jung Kook. This 7-member K-Pop boy group gains recognition for their authentic and self-produced music, top-notch performances, and the way they interact with their fans as well as has established themselves as “21st century Pop Icons” breaking countless world records.</p>
+<p>They always thrive to impart the positive impact to the youth in all around the world with meaningful activities such as the LOVE MYSELF campaign and the UN ‘Speak Yourself’ speech, which help them mobilize millions of fans - the <strong>ARMY</strong> - across the world.</p>
+<p>During 11 years, they have released more than 200 songs with a wide range of genres, with most of them composed and produced by the group members. The topics of their lyrics focus on subjects including mental health, the troubles of school-age youth and coming of age, loss, the journey towards self-love, individualism, and the consequences of fame and recognition.</p>
+<p>As an ARMY, I want to utilize the text analysis skill I acquired from MSCS264 to conduct some data mining with their song lyrics and look forward to discover some meaningful pattern in the song lyrics.</p>
+</section>
+<section id="dataset-wrangling" class="level1">
+<h1>DATASET WRANGLING</h1>
+<p>Data source: <a href="https://www.kaggle.com/datasets/kailic/bts-lyrics">Kaggle</a></p>
+<p>The data set has 16 variables and 301 observational units. It listed out all the songs that BTS has released up to their newest single “Take Two”. I removed the songs that only has instrument. Also, in some of their repackaged albums, most of the songs have been already released in the previous albums. I decided to filter out these repackaged songs to remove the duplicates. Besides, I excluded some skits, which are the normal life conversation between members. Finally, I just removed some columns that I did not need to use.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>bts_lyrics <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"dataset/lyrics-v12.csv"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(lyrics <span class="sc">!=</span> <span class="st">""</span>, repackaged <span class="sc">!=</span> <span class="cn">TRUE</span>, <span class="sc">!</span><span class="fu">str_detect</span>(eng_track_title, <span class="st">"Skit.*"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>kor_track_title, <span class="sc">-</span>id, <span class="sc">-</span>track_title, <span class="sc">-</span>has_full_ver, <span class="sc">-</span>repackaged) <span class="sc">%&gt;%</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">lyrics =</span> <span class="fu">str_replace_all</span>(lyrics, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>, <span class="st">" "</span>),  <span class="co"># Remove newlines</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">lyrics =</span> <span class="fu">str_replace_all</span>(lyrics, <span class="st">"[</span><span class="sc">\\</span><span class="st">(</span><span class="sc">\\</span><span class="st">{][^</span><span class="sc">\\</span><span class="st">)</span><span class="sc">\\</span><span class="st">}]*[</span><span class="sc">\\</span><span class="st">)</span><span class="sc">\\</span><span class="st">}]"</span>, <span class="st">""</span>), </span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">lyrics =</span> <span class="fu">str_replace_all</span>(lyrics, <span class="st">"[,</span><span class="sc">\\</span><span class="st">*</span><span class="sc">\\</span><span class="st">.!\`</span><span class="sc">\'</span><span class="st">“”‘’]"</span>, <span class="st">""</span>),</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">lyrics =</span> <span class="fu">str_replace_all</span>(lyrics, <span class="st">"</span><span class="sc">\"</span><span class="st">"</span>, <span class="st">""</span>),</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">lyrics_cleaned =</span> <span class="fu">str_extract_all</span>(lyrics, <span class="st">"</span><span class="sc">\\</span><span class="st">b[A-Za-z]+</span><span class="sc">\\</span><span class="st">b"</span>) <span class="sc">%&gt;%</span>  </span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">lapply</span>(<span class="cf">function</span>(x) <span class="fu">paste</span>(x, <span class="at">collapse =</span> <span class="st">" "</span>)) </span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>bts_songs <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"dataset/lyrics-v12.csv"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(lyrics <span class="sc">!=</span> <span class="st">""</span>, repackaged <span class="sc">!=</span> <span class="cn">TRUE</span>, <span class="sc">!</span><span class="fu">str_detect</span>(eng_track_title, <span class="st">"Skit.*"</span>), eng_track_title <span class="sc">!=</span> <span class="st">"“Thanks To” Notes"</span>, eng_track_title <span class="sc">!=</span> <span class="st">"Love Yourself: Answer Notes"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>kor_track_title, <span class="sc">-</span>id, <span class="sc">-</span>track_title, <span class="sc">-</span>has_full_ver, <span class="sc">-</span>repackaged, <span class="sc">-</span>album_title)<span class="sc">|&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">album_rd =</span> <span class="fu">as.Date</span>(album_rd, <span class="at">format =</span> <span class="st">"%Y-%m-%d"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Since I wanted to analyse the lyrics on the word level, I produced a data set for this approach.</p>
+<p><em>Word level:</em></p>
+<p>I removed the new line character and also some phrases which purpose is for hyping up. I also cleared some special characters. Then I converted all the words into lowercase, which makes it easier to analyze.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>bts_lyrics <span class="ot">&lt;-</span> bts_songs <span class="sc">|&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">lyrics =</span> <span class="fu">str_replace_all</span>(lyrics, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>, <span class="st">" "</span>),  <span class="co"># Remove newline characters</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">lyrics =</span> <span class="fu">str_replace_all</span>(lyrics, <span class="st">"[</span><span class="sc">\\</span><span class="st">(</span><span class="sc">\\</span><span class="st">{][^</span><span class="sc">\\</span><span class="st">)</span><span class="sc">\\</span><span class="st">}]*[</span><span class="sc">\\</span><span class="st">)</span><span class="sc">\\</span><span class="st">}]"</span>, <span class="st">""</span>), </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">lyrics =</span> <span class="fu">str_replace_all</span>(lyrics, <span class="st">"[,</span><span class="sc">\\</span><span class="st">*</span><span class="sc">\\</span><span class="st">.!\`</span><span class="sc">\'</span><span class="st">“”‘]"</span>, <span class="st">""</span>),</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">lyrics =</span> <span class="fu">str_replace_all</span>(lyrics, <span class="st">"</span><span class="sc">\"</span><span class="st">"</span>, <span class="st">""</span>),</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">lyrics =</span> <span class="fu">tolower</span>(lyrics)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="what-are-the-words-used-in-the-lyrics" class="level1">
-<h1>What are the words used in the lyrics?</h1>
+<section id="text-analysis" class="level1">
+<h1>TEXT ANALYSIS</h1>
+<section id="what-are-the-words-used-the-most-in-bts-lyrics" class="level2">
+<h2 class="anchored" data-anchor-id="what-are-the-words-used-the-most-in-bts-lyrics">What are the words used the most in BTS’ lyrics?</h2>
+<p>The lyrics investigated are the English translated version of the Korean songs and the original from the English songs of the group. I used the stop words list to exclude the common English words that has high frequency but not convey much information. I did tweak the list a little bit. First of all,</p>
+<p>I have to remove <code>myself</code>, <code>yourself</code>, <code>yourselves</code>, and <code>ourselves</code> from the list. As I mentioned above, BTS, supported by UNICEF, promotes the <a href="https://www.love-myself.org/eng/home/">Love Myself</a>campaign with the frequent existence of the motto “Love Yourself” and “Love Ourselves” in their lyrics so these words play an important role in their lyrics. Additionally, BTS usually uses some non-lexical vocables to fill space or add a rhythmic and melodic element to a song so I also added some common vocables that appear in their song.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>stopwordsList <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(<span class="fu">stopwords</span>(<span class="st">"en"</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(<span class="at">value=</span><span class="st">"na"</span>)  <span class="sc">|&gt;</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(<span class="at">value=</span><span class="st">"la"</span>)  <span class="sc">|&gt;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(<span class="at">value=</span><span class="st">"_"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(<span class="at">value=</span><span class="st">"oh"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(<span class="at">value=</span><span class="st">"yeah"</span>)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>stopwordsList <span class="ot">&lt;-</span> stopwordsList[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">8</span>,<span class="dv">12</span>,<span class="dv">13</span>),]</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>wordsLyrics <span class="ot">&lt;-</span> <span class="fu">str_split</span>(bts_lyrics<span class="sc">$</span>lyrics_cleaned, <span class="st">"</span><span class="sc">\\</span><span class="st">s+"</span>)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>wordsLyricsList <span class="ot">&lt;-</span> <span class="fu">unlist</span>(wordsLyrics) </span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>wordsLyricsList <span class="ot">&lt;-</span> wordsLyricsList[<span class="fu">str_detect</span>(wordsLyricsList,<span class="st">"[A-Za-z']+$"</span>)]</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>wordFreq <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">table</span>(wordsLyricsList)) <span class="sc">|&gt;</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">wordsLyricsList =</span> <span class="fu">as.character</span>(wordsLyricsList)) <span class="sc">|&gt;</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">anti_join</span>(stopwordsList,<span class="at">by=</span><span class="fu">c</span>(<span class="at">wordsLyricsList=</span><span class="st">"value"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(Freq,<span class="at">n=</span><span class="dv">300</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>stopwordsList <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(<span class="fu">stopwords</span>(<span class="st">"en"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(<span class="at">value=</span><span class="st">"na"</span>)  <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(<span class="at">value=</span><span class="st">"la"</span>)  <span class="sc">|&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(<span class="at">value=</span><span class="st">"_"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(<span class="at">value=</span><span class="st">"oh"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(<span class="at">value=</span><span class="st">"yeah"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(<span class="at">value=</span><span class="st">"ay"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(<span class="at">value=</span><span class="st">"ya"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(<span class="at">value =</span> <span class="st">"im"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(<span class="at">value =</span> <span class="st">"i’m"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(<span class="at">value =</span> <span class="st">"it’s"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(<span class="at">value =</span> <span class="st">"don’t"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(<span class="at">value =</span> <span class="st">"i’ll"</span>) </span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>stopwordsList <span class="ot">&lt;-</span> stopwordsList[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">8</span>,<span class="dv">12</span>,<span class="dv">13</span>),]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Then I split all the words in every lyric and put them all in a list. Using the stop words list, I created a frequency tibble for all the words in every BTS’ song.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2003</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wordcloud2</span>(<span class="at">data=</span>wordFreq, <span class="at">size=</span><span class="fl">1.6</span>, <span class="at">color=</span><span class="st">'random-dark'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>wordsLyrics <span class="ot">&lt;-</span> <span class="fu">str_split</span>(bts_lyrics<span class="sc">$</span>lyrics, <span class="st">"</span><span class="sc">\\</span><span class="st">s+"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>wordsLyricsList <span class="ot">&lt;-</span> <span class="fu">unlist</span>(wordsLyrics) </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>wordsLyricsList <span class="ot">&lt;-</span> wordsLyricsList[<span class="fu">str_detect</span>(wordsLyricsList,<span class="st">"[A-Za-z']+$"</span>)]</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>wordFreq <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">table</span>(wordsLyricsList)) <span class="sc">|&gt;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">wordsLyricsList =</span> <span class="fu">as.character</span>(wordsLyricsList)) <span class="sc">|&gt;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">anti_join</span>(stopwordsList,<span class="at">by=</span><span class="fu">c</span>(<span class="at">wordsLyricsList=</span><span class="st">"value"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(Freq,<span class="at">n=</span><span class="dv">200</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Usually, when we wanted to look at the frequency of words, Word Cloud would be the most representative visualization that is applicable for this purpose.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2003</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wordcloud2</span>(<span class="at">data=</span>wordFreq, <span class="at">size=</span><span class="fl">1.5</span>, <span class="at">color =</span> <span class="st">'random-light'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="wordcloud2 html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-fa5bb62f1439c580e1e4" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-fa5bb62f1439c580e1e4">{"x":{"word":["like","im","dont","just","love","know","I","go","youre","even","now","cant","can","say","want","one","wanna","myself","run","right","Im","night","ill","let","time","day","get","heart","come","need","dream","still","away","girl","make","world","baby","look","see","back","life","hey","stop","keep","lets","got","never","way","tell","fall","give","good","us","feel","always","please","everything","eyes","stars","So","hands","dynamite","bring","fire","fly","light","going","tonight","think","little","end","really","Dyn","without","ya","best","hand","take","today","together","city","put","something","beat","bang","thats","try","every","moment","much","didnt","first","call","stay","hold","pretty","ayy","crazy","fine","live","scared","place","smile","different","people","ay","two","become","fun","watch","music","sky","hope","okay","talk","theres","pain","set","everyone","getting","show","well","bad","days","new","money","nothing","wont","believe","Cause","forever","things","happy","name","walk","young","alight","alone","dance","gonna","high","rap","roll","butterfly","hard","ready","side","top","around","hate","lie","soul","The","wanted","ever","left","youll","hyung","sweet","long","though","already","break","change","fake","hurt","made","real","anything","became","drink","hear","leave","maybe","owoah","sun","tear","huh","looking","saying","sorry","step","ah","beautiful","big","cause","cold","words","yes","Ima","thing","times","cry","funk","lost","man","mind","said","We","woah","feet","makes","move","room","save","year","body","face","find","someone","die","whats","yo","ive","lonely","looked","phone","song","ugh","anyway","destiny","dreams","far","jump","sometimes","comes","feeling","id","mic","shine","Shining","This","throw","true","wings","better","blue","boy","fear","flower","remember","turn","And","answer","home","matter","path","tomorrow","Yeah","converse","cool","glow","head","inside","instead","last","many","sing","whatever","wish","woo","gon","memories","others","stage","three","trust","used","wasnt","aint","alright","anymore","care","found","Lets","worry","becomes","breath","couldnt","cuz","isnt","My","party","When","wrong","yolo","breathe","Get","moon","rain","running","tears","thought","years","air","behind","bit","everybody","follow","front","next","person","reason","scream","uh","work","yourself"],"freq":[758,684,547,510,490,476,463,380,380,330,309,262,259,247,242,233,231,227,215,214,208,205,201,200,187,179,176,166,165,165,159,159,157,157,155,155,154,152,147,145,144,141,141,137,137,135,132,128,122,118,115,112,112,107,106,106,105,103,102,101,99,98,97,97,97,97,95,95,94,93,91,91,90,90,90,89,89,89,88,88,87,87,85,84,81,79,78,77,77,77,76,76,75,75,74,74,73,73,73,72,72,71,71,70,70,69,69,68,67,67,66,66,65,65,65,64,63,63,62,62,62,62,61,61,61,60,60,60,59,59,59,59,58,58,57,57,56,56,56,56,56,56,56,55,55,55,55,55,54,54,54,54,54,54,53,53,53,51,51,50,50,49,49,49,49,49,49,49,48,48,48,48,48,48,48,48,48,47,47,47,47,47,46,46,46,46,46,46,46,45,45,45,44,44,44,44,44,44,44,44,43,43,43,43,43,43,42,42,42,42,41,41,41,40,40,40,40,40,40,39,39,39,39,39,39,38,38,38,38,38,38,38,38,38,38,37,37,37,37,37,37,37,36,36,36,36,36,36,36,35,35,35,35,35,35,35,35,35,35,35,35,34,34,34,34,34,34,34,34,33,33,33,33,33,33,33,32,32,32,32,32,32,32,32,32,32,31,31,31,31,31,31,31,31,30,30,30,30,30,30,30,30,30,30,30,30,30],"fontFamily":"Segoe UI","fontWeight":"bold","color":"random-dark","minSize":0,"weightFactor":0.3799472295514512,"backgroundColor":"white","gridSize":0,"minRotation":-0.7853981633974483,"maxRotation":0.7853981633974483,"shuffle":true,"rotateRatio":0.4,"shape":"circle","ellipticity":0.65,"figBase64":null,"hover":null},"evals":[],"jsHooks":{"render":[{"code":"function(el,x){\n                        console.log(123);\n                        if(!iii){\n                          window.location.reload();\n                          iii = False;\n\n                        }\n  }","data":null}]}}</script>
+<script type="application/json" data-for="htmlwidget-fa5bb62f1439c580e1e4">{"x":{"word":["like","just","love","know","go","even","now","you’re","can","say","wanna","want","one","run","can’t","myself","let","night","get","right","day","need","come","life","baby","time","dont","girl","heart","world","still","hey","look","make","away","got","keep","stop","see","dream","back","never","na-na","youre","tell","fall","light","way","give","please","feel","cause","bring","good","stars","always","dynamite","hands","us","fire","fly","lets","tonight","everything","little","dyn-na-na-na","eyes","we’re","without","think","today","take","going","best","city","put","every","really","beat","ill","bang","end","together","hold","ayy","stay","call","moment","side","hand","pretty","fine","live","let’s","scared","first","much","smile","try","two","crazy","fun","watch","high","place","show","sky","something","forever","okay","different","set","become","getting","talk","money","nothing","break","new","believe","days","everyone","gonna","walk","alight","bad","pain","roll","well","young","butterfly","rap","cant","ever","hate","ready","alone","people","dance","hope","music","shining","lie","soul","sweet","top","maybe","though","things","drink","fake","tear","change","huh","na-na-na","yes","name","real","ah","anyway","cold","happy","ima","looking","sun","already","beautiful","funk","man","sing","sorry","around","cry","hard","hear","jump","made","there’s","big","left","save","sometimes","that’s","woah-oh-oh","yo","became","leave","makes","saying","step","throw","find","lonely","song","thats","thing","ugh","anything","cool","destiny","die","feet","hurt","mind","times","uh"],"freq":[744,506,475,456,360,345,299,267,250,239,233,222,221,213,211,211,204,202,201,195,180,166,165,162,161,160,158,155,152,152,151,148,148,147,142,140,135,133,130,127,122,122,120,120,119,116,115,113,112,107,106,105,103,103,101,100,98,98,97,96,96,96,95,92,91,90,89,89,89,87,87,86,85,84,84,84,83,83,82,81,80,80,80,78,76,76,75,75,75,74,74,73,71,70,70,69,69,68,68,68,65,65,65,64,64,64,64,64,62,62,61,61,60,60,60,59,59,58,58,57,57,57,57,57,56,56,56,56,56,56,55,55,54,54,54,54,53,53,52,52,52,52,51,51,51,51,50,50,49,48,48,48,47,47,47,47,46,46,45,45,45,45,45,45,45,44,44,44,44,44,44,43,43,43,43,43,43,43,42,42,42,42,42,42,42,41,41,41,41,41,41,40,40,40,40,40,40,39,39,39,39,39,39,39,39,39],"fontFamily":"Segoe UI","fontWeight":"bold","color":"random-light","minSize":0,"weightFactor":0.3629032258064516,"backgroundColor":"white","gridSize":0,"minRotation":-0.7853981633974483,"maxRotation":0.7853981633974483,"shuffle":true,"rotateRatio":0.4,"shape":"circle","ellipticity":0.65,"figBase64":null,"hover":null},"evals":[],"jsHooks":{"render":[{"code":"function(el,x){\n                        console.log(123);\n                        if(!iii){\n                          window.location.reload();\n                          iii = False;\n\n                        }\n  }","data":null}]}}</script>
 </div>
 </div>
-<section id="emotion" class="level2">
-<h2 class="anchored" data-anchor-id="emotion">Emotion</h2>
+<p>From the word cloud, we can see that <code>like</code> and <code>love</code> are the two words with the highest frequency among all words in the lyrics. BTS always want to send the message to the ARMY that they should “love yourself” to the fullest but they mask it as a love song for the young people. That is the reason why these two words appear more frequently than others. Another noticeably frequent word is <code>run</code>. This word not only embodies the title track of one of their most iconic albums but also encapsulates the essence of relentlessly moving forward, a sentiment deeply resonating with the unwavering spirit of youth in the middle of adversity, a concept intrinsic to BTS. And we could see the word <code>myself</code>, which is a part of their successful campaign’s name that is against violence toward children and teens around the world, with the hope of making the world a better place through music..</p>
+</section>
+<section id="number-of-word-distribution-over-the-time" class="level2">
+<h2 class="anchored" data-anchor-id="number-of-word-distribution-over-the-time">Number of Word Distribution Over The Time</h2>
+<p>During some early years of their career, BTS delved deep into the realm of hip hop, channeling their creative energies predominantly into this genre. During these formative years, while they did experiment with other musical styles, the number of non-hip hop tracks remained relatively limited. Their debut era was characterized by a collection of rap-heavy compositions, where the lyrical content took center stage, resulting in high speechiness. However, as their artistic vision evolved and matured, BTS began to transcend genre boundaries, exploring the vast landscape of pop, R&amp;B, and beyond. With each release, they carved out a distinct identity, showcasing their versatility and willingness to embrace diverse musical influences, thereby captivating audiences worldwide.</p>
+<p>I want to analyse whether this change does affect the speechiness of their songs throughout the time.</p>
+<p>In their discography, BTS released three lead singles. I removed the two “Dynamite” because this song is included in the album “Be”. I also excluded “Butter/Permission To Dance” since they released these songs separately in two other singles. Then I computed the average of number of words in each album and created a graph to compare it.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>bts_lyrics_sentences <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"dataset/lyrics-v12.csv"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(lyrics <span class="sc">!=</span> <span class="st">""</span>, repackaged <span class="sc">!=</span> <span class="cn">TRUE</span>, <span class="sc">!</span><span class="fu">str_detect</span>(eng_track_title, <span class="st">"Skit.*"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>kor_track_title, <span class="sc">-</span>id, <span class="sc">-</span>track_title, <span class="sc">-</span>has_full_ver, <span class="sc">-</span>repackaged) <span class="sc">%&gt;%</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">lyrics =</span> <span class="fu">str_replace_all</span>(lyrics, <span class="st">"[</span><span class="sc">\\</span><span class="st">(</span><span class="sc">\\</span><span class="st">{][^</span><span class="sc">\\</span><span class="st">)</span><span class="sc">\\</span><span class="st">}]*[</span><span class="sc">\\</span><span class="st">)</span><span class="sc">\\</span><span class="st">}]"</span>, <span class="st">""</span>), </span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">lyrics =</span> <span class="fu">str_replace_all</span>(lyrics, <span class="st">"[,</span><span class="sc">\\</span><span class="st">*</span><span class="sc">\\</span><span class="st">.!\`“”‘’]"</span>, <span class="st">""</span>),</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">lyrics =</span> <span class="fu">str_replace_all</span>(lyrics, <span class="st">"</span><span class="sc">\"</span><span class="st">"</span>, <span class="st">""</span>) </span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  ) </span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>bts_lyrics_sentences<span class="sc">$</span>lyrics[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "were now going to progress to some steps\nwhich are a bit more difficult\nready set and begin\nbig hit exclusive exclusive\ndj friz\nwhos that?\nb a n g t a n\nbulletproof boy scouts\n\n2 cool 2 cool 4 skool\n2 cool 2 cool 4 skool\nteenagers in their 10s and 20s\nlet's talk about it easily\nyou take that\n2 cool 2 cool 4 skool\n2 cool 2 cool 4 skool\nteenagers in their 10s and 20s\nlet's talk about it easily\nyou take that"</code></pre>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>bts_albums <span class="ot">&lt;-</span> bts_lyrics <span class="sc">|&gt;</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">lyrics_count =</span> <span class="fu">str_count</span>(lyrics, <span class="st">"</span><span class="sc">\\</span><span class="st">s+"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(album_rd, eng_album_title) <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_count =</span> <span class="fu">mean</span>(lyrics_count)) <span class="sc">|&gt;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">#remove the three lead singles</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">str_detect</span>(eng_album_title,<span class="st">"^Dynamite ."</span>) <span class="sc">&amp;&amp;</span> eng_album_title <span class="sc">!=</span> <span class="st">"Butter / Permission to Dance"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'album_rd'. You can override using the
+`.groups` argument.</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(bts_lyrics_sentences<span class="sc">$</span>lyrics[<span class="dv">2</span>], <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] │  give it to me&lt;
-    │ &gt;  be nervous&lt;
-    │ &gt;  the one to end it all&lt;
-    │ &gt;  we are bulletproof&lt;
-    │ &gt; we are bulletproof&lt;
-    │ &gt; bulletproof&lt;
-    │ &gt; &lt;
-    │ &gt; the name is jungkook my scale is nationwide&lt;
-    │ &gt; i pulled all-nighters at practice rooms&lt;
-    │ &gt; instead of school dancing and singing&lt;
-    │ &gt; while you guys partied&lt;
-    │ &gt; i gave up sleep for my dreams&lt;
-    │ &gt; i spent all night holding a pen&lt;
-    │ &gt; closing my eyes only after the morning sun rises&lt;
-    │ &gt; my limit was broken in the&lt;
-    │ &gt; double standards and many oppositions&lt;
-    │ &gt; but i got lucky and was contacted by an agency&lt;
-    │ &gt; yall you who are called rappers because you cant sing&lt;
-    │ &gt; the rapper title is an extravagance for you&lt;
-    │ &gt; &lt;
-    │ &gt; everywhere i go everything i do&lt;
-    │ &gt; i will show you as much as i sharpened my sword&lt;
-    │ &gt; to all the people who looked down on me&lt;
-    │ &gt;  hey shout it out&lt;
-    │ &gt; &lt;
-    │ &gt; oh throw a stone at me if youve done as much as i did&lt;
-    │ &gt; we go hard we have no fear&lt;
-    │ &gt;  we just sing it like&lt;
-    │ &gt;  we just sing it like&lt;
-    │ &gt; oh throw a stone at me if youve done as much as i did&lt;
-    │ &gt; we go hard we have no fear&lt;
-    │ &gt;  we just sing it like&lt;
-    │ &gt;  we just sing it like&lt;
-    │ &gt; &lt;
-    │ &gt;  give it to me&lt;
-    │ &gt;  be nervous&lt;
-    │ &gt;  the one to end it all&lt;
-    │ &gt;  we are bulletproof&lt;
-    │ &gt; we are bulletproof&lt;
-    │ &gt; bulletproof&lt;
-    │ &gt; &lt;
-    │ &gt; look at my profile theres nothing there yet&lt;
-    │ &gt; still a trainee and rapper man&lt;
-    │ &gt; yeah i do know thats nothing&lt;
-    │ &gt; i contemplated a lot but now i dont need anything&lt;
-    │ &gt; youre still an amateur&lt;
-    │ &gt; im in the majors hope youll rot like that&lt;
-    │ &gt; rap monster like my name&lt;
-    │ &gt; i can eat up any kind of beat like a monster&lt;
-    │ &gt; im loyal to my name guys come here take a preview&lt;
-    │ &gt; i put a twist to being an idol&lt;
-    │ &gt; haha hyungs who only had hip-hop pride&lt;
-    │ &gt; told me itd be impossible but&lt;
-    │ &gt; look carefully i place a period after impossible&lt;
-    │ &gt; im possible now are we all set boy?&lt;
-    │ &gt; &lt;
-    │ &gt; everywhere i go everything i do&lt;
-    │ &gt; i will show you as much as i sharpened my sword&lt;
-    │ &gt; to all the people who looked down on me&lt;
-    │ &gt;  hey shout it out&lt;
-    │ &gt; &lt;
-    │ &gt; oh throw a stone at me if youve done as much as i did&lt;
-    │ &gt; we go hard we have no fear&lt;
-    │ &gt;  we just sing it like&lt;
-    │ &gt;  we just sing it like&lt;
-    │ &gt; oh throw a stone at me if youve done as much as i did&lt;
-    │ &gt; we go hard we have no fear&lt;
-    │ &gt;  we just sing it like&lt;
-    │ &gt;  we just sing it like&lt;
-    │ &gt; &lt;
-    │ &gt;  give it to me&lt;
-    │ &gt;  be nervous&lt;
-    │ &gt;  the one to end it all&lt;
-    │ &gt;  we are bulletproof&lt;
-    │ &gt; we are bulletproof&lt;
-    │ &gt; bulletproof&lt;
-    │ &gt; bulletproof</code></pre>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>bts_albums_plot <span class="ot">&lt;-</span> bts_albums <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> album_rd, <span class="at">y =</span> mean_count, <span class="at">text =</span> <span class="fu">paste</span>(<span class="st">"Album:"</span>, eng_album_title, <span class="st">"&lt;br&gt;Release Date:"</span>, album_rd, <span class="st">"&lt;br&gt;Mean Count:"</span>, <span class="fu">round</span>(mean_count, <span class="dv">2</span>))),<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color=</span>eng_album_title, <span class="at">size =</span> mean_count),<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Release Date"</span>, <span class="at">y =</span> <span class="st">"Mean Number of Words In A Song"</span>, <span class="at">title =</span> <span class="st">"Average number of words in each BTS song over time"</span>, <span class="at">subtitle =</span> <span class="st">"From 2013 to 2023"</span>) <span class="sc">+</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>plotly_plot <span class="ot">&lt;-</span> <span class="fu">ggplotly</span>(bts_albums_plot, <span class="at">tooltip =</span> <span class="st">"text"</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="fu">saveWidget</span>(plotly_plot, <span class="at">file =</span> <span class="st">"plot1.html"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sentenceLyricsList <span class="ot">&lt;-</span> <span class="fu">str_split</span>(bts_lyrics_sentences<span class="sc">$</span>lyrics,<span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>sentenceLyricsList <span class="ot">&lt;-</span> <span class="fu">unlist</span>(sentenceLyricsList) </span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>wordsLyricsList <span class="ot">&lt;-</span> wordsLyricsList[<span class="fu">str_detect</span>(wordsLyricsList,<span class="st">"[A-Za-z']+$"</span>)]</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>wordFreq <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">table</span>(wordsLyricsList)) <span class="sc">|&gt;</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">wordsLyricsList =</span> <span class="fu">as.character</span>(wordsLyricsList)) <span class="sc">|&gt;</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">anti_join</span>(stopwordsList,<span class="at">by=</span><span class="fu">c</span>(<span class="at">wordsLyricsList=</span><span class="st">"value"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(Freq,<span class="at">n=</span><span class="dv">300</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>This is an interactive plot:</strong></p>
+<iframe src="plot1.html" title="Plot 2" width="700px" height="500px"></iframe>
+<p>In the albums following “Dark and Wild” (09/2014), there’s a noticeable shift in BTS’s music. The era spanning “Dark and Wild” to “The Most Beautiful Moment in Life” series marks a pivotal moment where the group explored a broader spectrum of genres. This transition brought about changes in line distribution within songs, notably favoring the Vocal team (Jin, Jimin, V, and JK) with increased singing durations. Conversely, the Rap team (RM, Suga, j-hope) saw a decline in their line distribution as rap-centric tracks became less prevalent.</p>
+<p>With the diminishing emphasis on rap, the average number of words per song decreased accordingly. However, an intriguing outlier emerges with the release of “Love Yourself: Answer” in August 2018. This album stands out with the highest mean number of words, attributed partly to its larger tracklist. Additionally, each member of the Rap team presents a solo track, showcasing individual personalities and contributing to the album’s overall word count.</p>
+<p>To ascertain the impact of reduced rap segments on speechiness, it’s imperative to analyze the variance in word count among songs performed by the Rap team, the Vocal team, and the group as a whole. This exploration promises insights into BTS’s evolving musical dynamics over time.</p>
+</section>
+<section id="difference-in-number-of-words-performed-by-the-rap-team-the-vocal-team-and-the-whole-group" class="level2">
+<h2 class="anchored" data-anchor-id="difference-in-number-of-words-performed-by-the-rap-team-the-vocal-team-and-the-whole-group">Difference in Number of Words Performed by The Rap Team, The Vocal Team, and The Whole Group</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>bts_team_songs <span class="ot">&lt;-</span> bts_lyrics <span class="sc">|&gt;</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">lyrics_count =</span> <span class="fu">str_count</span>(lyrics, <span class="st">"</span><span class="sc">\\</span><span class="st">s+"</span>),</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">performed_by =</span> <span class="fu">fct_collapse</span>(performed_by,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                                     <span class="st">"Rapper"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"RM"</span>, <span class="st">"SUGA"</span>, <span class="st">"J-HOPE"</span>, <span class="st">"RM; SUGA; J-HOPE"</span>, <span class="st">"SUGA; RM"</span>, <span class="st">"SUGA; JIMIN"</span>, <span class="st">"RM; SUGA"</span>),</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>                                     <span class="st">"Vocal"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"JIN"</span>, <span class="st">"JUNGKOOK"</span>, <span class="st">"V"</span>, <span class="st">"JIMIN"</span>, <span class="st">"JUNGKOOK; V; JIMIN; JIN"</span>, <span class="st">"JIN; JIMIN; JUNGKOOK"</span>, <span class="st">"V; JIMIN"</span>),</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>                                     <span class="st">"All Team"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"BTS"</span>),</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">other_level =</span><span class="st">"Vocal + Rap"</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>                                     ))</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(bts_team_songs, <span class="fu">aes</span>(<span class="at">x =</span> performed_by, <span class="at">y =</span> lyrics_count)) <span class="sc">+</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">outlier.size =</span> <span class="fl">0.001</span>) <span class="sc">+</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="fu">aes</span>(<span class="at">color =</span> performed_by)) <span class="sc">+</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span><span class="st">"Comparison the Number of Words of Song Performed by Each Team"</span>, <span class="at">x =</span> <span class="st">"Performed By"</span>, <span class="at">y =</span> <span class="st">"Number of Words in A Song"</span>, <span class="at">color =</span> <span class="st">"Team"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="string_regex_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
 </div>
+</div>
+<p>We can observe that despite the relatively few songs performed by the rap team, the distribution of speechiness in these songs is somewhat similar to those performed by the entire group, with three notable outliers. Conversely, the vocal team tends to perform songs with lower speechiness. This observation further strengthens my estimation regarding the influence of the genre transition on the average number of words per song produced by the group over the years.</p>
 
 
 </section>
