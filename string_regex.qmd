@@ -124,7 +124,7 @@ bts_albums <- bts_lyrics |>
 ```{r}
 bts_albums_plot <- bts_albums |>
   ggplot(aes(x = album_rd, y = mean_count, text = paste("Album:", eng_album_title, "<br>Release Date:", album_rd, "<br>Mean Count:", round(mean_count, 2))),show.legend = FALSE) +
-  geom_point(aes(color=eng_album_title, size = mean_count),show.legend = FALSE) +
+  geom_point(aes(color=eng_album_title, size = mean_count)) +
   labs(x = "Release Date", y = "Mean Number of Words In A Song", title = "Average number of words in each BTS song over time", subtitle = "From 2013 to 2023") +
   theme_classic()
 
@@ -136,7 +136,7 @@ saveWidget(plotly_plot, file = "plot1.html")
 **This is an interactive plot:**
 
 ```{=html}
-<iframe src="plot1.html" title="Plot 2" width = "700px" height = "500px"></iframe>
+<iframe src="plot1.html" title="Plot 2" width = "800px" height = "500px"></iframe>
 ```
 
 In the albums following "Dark and Wild" (09/2014), there's a noticeable shift in BTS's music. The era spanning "Dark and Wild" to "The Most Beautiful Moment in Life" series marks a pivotal moment where the group explored a broader spectrum of genres. This transition brought about changes in line distribution within songs, notably favoring the Vocal team (Jin, Jimin, V, and JK) with increased singing durations. Conversely, the Rap team (RM, Suga, j-hope) saw a decline in their line distribution as rap-centric tracks became less prevalent.
