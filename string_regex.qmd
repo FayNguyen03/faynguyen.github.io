@@ -123,8 +123,8 @@ bts_albums <- bts_lyrics |>
 
 ```{r}
 bts_albums_plot <- bts_albums |>
-  ggplot(aes(x = album_rd, y = mean_count, text = paste("Album:", eng_album_title, "<br>Release Date:", album_rd, "<br>Mean Count:", round(mean_count, 2))),show.legend = FALSE) +
-  geom_point(aes(color=eng_album_title, size = mean_count)) +
+  ggplot(aes(x = album_rd, y = mean_count, text = paste("Album:", eng_album_title, "<br>Release Date:", album_rd, "<br>Mean Count:", round(mean_count, 2)))) +
+  geom_point(aes(color = eng_album_title), size = 2, alpha = 0.8, show.legend = FALSE) +
   labs(x = "Release Date", y = "Mean Number of Words In A Song", title = "Average number of words in each BTS song over time", subtitle = "From 2013 to 2023") +
   theme_classic()
 
@@ -141,9 +141,7 @@ saveWidget(plotly_plot, file = "plot1.html")
 
 In the albums following "Dark and Wild" (09/2014), there's a noticeable shift in BTS's music. The era spanning "Dark and Wild" to "The Most Beautiful Moment in Life" series marks a pivotal moment where the group explored a broader spectrum of genres. This transition brought about changes in line distribution within songs, notably favoring the Vocal team (Jin, Jimin, V, and JK) with increased singing durations. Conversely, the Rap team (RM, Suga, j-hope) saw a decline in their line distribution as rap-centric tracks became less prevalent.
 
-With the diminishing emphasis on rap, the average number of words per song decreased accordingly. However, an intriguing outlier emerges with the release of "Love Yourself: Answer" in August 2018. This album stands out with the highest mean number of words, attributed partly to its larger tracklist. Additionally, each member of the Rap team presents a solo track, showcasing individual personalities and contributing to the album's overall word count.
-
-To ascertain the impact of reduced rap segments on speechiness, it's imperative to analyze the variance in word count among songs performed by the Rap team, the Vocal team, and the group as a whole. This exploration promises insights into BTS's evolving musical dynamics over time.
+With the diminishing emphasis on rap, the average number of words per song decreased accordingly. To ascertain the impact of reduced rap segments on speechiness, it's imperative to analyze the variance in word count among songs performed by the Rap team, the Vocal team, and the group as a whole. This exploration promises insights into BTS's evolving musical dynamics over time.
 
 
 ## Difference in Number of Words Performed by The Rap Team, The Vocal Team, and The Whole Group
