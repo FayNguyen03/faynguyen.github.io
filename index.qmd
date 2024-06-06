@@ -1,5 +1,5 @@
 ---
-title: "Fay Nguyen"
+title: "Fay's Data Science Portfolio"
 about:
   id: intro_heading
   template: trestles
@@ -11,6 +11,7 @@ about:
     - icon: linkedin
       href: https://www.linkedin.com/in/faynguyen03/
 sidebar: false
+
 ---
 
 ::: {#intro_heading}

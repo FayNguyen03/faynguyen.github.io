@@ -1,6 +1,6 @@
 ---
 title: "Final Project: Museums"
-sidebar: FALSE
+sidebar: false
 ---
 
 ```{=html}
