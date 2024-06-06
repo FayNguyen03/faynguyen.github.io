@@ -1,0 +1,9 @@
+---
+title: "Final Project: Museums"
+sidebar: FALSE
+---
+
+```{=html}
+<iframe src="https://faynguyen03.shinyapps.io/museum_project/" title="Museum" width = "1500px" height = "600px"></iframe>
+```
+

@@ -21,6 +21,7 @@ website:
         - map.qmd
         - simulation.qmd
         - string_regex.qmd
+        - museums.qmd
        
       
   page-footer:

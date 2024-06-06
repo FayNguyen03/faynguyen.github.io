@@ -16,11 +16,11 @@ sidebar: false
 ::: {#intro_heading}
 ## Goals
 
-- Landing My First Internship this Summer
+- Landing My First Internship in Industry
 
 ## Education
 
-BA in Computer Science, Maths 
+BA in Computer Science, Math
 
 Statistics and Data Science concentration
 
