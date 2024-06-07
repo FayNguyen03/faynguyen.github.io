@@ -1,3 +1,3 @@
-# Fay Nguyen's Personal Website for MSCS 264
+# Fay Nguyen's Personal Data Science Portfolio
 
 Created by Quarto in RStudio
