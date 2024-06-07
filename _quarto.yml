@@ -22,7 +22,7 @@ website:
         - simulation.qmd
         - string_regex.qmd
         - museums.qmd
-       
+        - sql_practice.qmd
       
   page-footer:
     left: |
