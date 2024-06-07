@@ -2,7 +2,7 @@
 title: "Mini Project 3: Strings and Regular Expressions"
 ---
 
-```{r,echo=FALSE,result=FALSE,message = FALSE}
+```{r,echo=FALSE,result=FALSE,message = FALSE,warning=FALSE}
 library(quarto)
 library(stringr)
 library(tidyverse)

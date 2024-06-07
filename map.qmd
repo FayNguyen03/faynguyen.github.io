@@ -2,7 +2,7 @@
 title: "Mini Project 1: Maps"
 ---
 
-```{r,echo=FALSE,result=FALSE,message = FALSE}
+```{r,echo=FALSE,result=FALSE,message = FALSE, warning=FALSE}
 library(usdata)
 library(maps)
 library(ggplot2)
@@ -13,6 +13,7 @@ library(devtools)
 library(leaflet)
 library(ggspatial)
 library(quarto)
+library(mapproj)
 ```
 
 ## US States
